@@ -1,0 +1,11 @@
+{
+  "name": "biomed-flowchart-editor",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Project-level validation scripts for the biomed draw.io fork.",
+  "type": "module",
+  "scripts": {
+    "build": "node tests/verify-static-app.mjs",
+    "test": "node tests/verify-static-app.mjs"
+  }
+}
