@@ -28,8 +28,8 @@ if (!/needs:\s*validate/.test(workflow)) {
   throw new Error('Deploy job must depend on validate job');
 }
 
-if (!/if:\s*github\.event_name == 'push'/.test(workflow)) {
-  throw new Error('Deploy job must be limited to push events');
+if (!/if:\s*github\.event_name != 'pull_request'/.test(workflow)) {
+  throw new Error('Deploy job must run for pushes and manual dispatches, but not pull requests');
 }
 
 if (!/if:\s*env\.CLOUDFLARE_API_TOKEN != ''/.test(workflow)) {
