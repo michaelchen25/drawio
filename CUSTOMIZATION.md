@@ -19,3 +19,12 @@ This file records every project-specific change made on top of the upstream
 - Added this customization log.
 - Added project-level npm smoke-test scripts for the static webapp baseline.
 - No draw.io editor core files were modified.
+
+### T-102: Custom configuration entry point
+
+- Added `src/main/webapp/custom-config/app-config.js` as the project-owned
+  configuration module.
+- Updated `src/main/webapp/js/PreConfig.js` to load the custom configuration
+  module through draw.io's existing pre-configuration entry point.
+- Added an automated test that verifies `PreConfig.js` loads the custom module
+  and that the module sets the expected project namespace.

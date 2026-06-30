@@ -12,3 +12,11 @@ window.DRAWIO_LIGHTBOX_URL = null; // Replace with your lightbox URL, eg. https:
 window.DRAW_MATH_URL = 'math4/es5';
 window.DRAWIO_CONFIG = null; // Replace with your custom draw.io configurations. For more details, https://www.drawio.com/doc/faq/configure-diagram-editor
 urlParams['sync'] = 'manual';
+
+// biomed-flowchart-editor custom configuration entry point.
+window.BIOMED_CUSTOM_CONFIG_PATH = 'custom-config/app-config.js';
+
+if (typeof mxscript === 'function')
+{
+	mxscript(window.BIOMED_CUSTOM_CONFIG_PATH);
+}
