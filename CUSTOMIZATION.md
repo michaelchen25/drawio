@@ -36,3 +36,13 @@ This file records every project-specific change made on top of the upstream
 - The `deploy` job uploads `src/main/webapp` to Azure Static Web Apps only when
   `AZURE_STATIC_WEB_APPS_API_TOKEN` is present.
 - Added workflow structure validation to the project test suite.
+
+### T-104: Static Web Apps configuration prep
+
+- Added `src/main/webapp/staticwebapp.config.json` for Azure Static Web Apps.
+- Added `docs/deployment-azure-static-web-apps.md` with owner-only deployment
+  steps and cost guardrails.
+- Added automated validation for the Static Web Apps config file and optional
+  post-deployment smoke-test wiring.
+- No Azure resource was created and no DNS or paid service configuration was
+  performed.
