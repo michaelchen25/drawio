@@ -1,7 +1,7 @@
-const baseUrl = process.env.BIOMED_SWA_URL;
+const baseUrl = process.env.BIOMED_PAGES_URL;
 
 if (!baseUrl) {
-  throw new Error('Set BIOMED_SWA_URL to the deployed Azure Static Web Apps URL');
+  throw new Error('Set BIOMED_PAGES_URL to the deployed Cloudflare Pages URL');
 }
 
 for (const path of ['/', '/index.html', '/js/bootstrap.js', '/custom-config/app-config.js']) {

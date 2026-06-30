@@ -31,18 +31,30 @@ This file records every project-specific change made on top of the upstream
 
 ### T-103: GitHub Actions CI/CD
 
-- Added `.github/workflows/azure-static-web-apps.yml`.
+- Added `.github/workflows/cloudflare-pages.yml`.
 - The `validate` job runs automated tests on pushes and pull requests to `dev`.
-- The `deploy` job uploads `src/main/webapp` to Azure Static Web Apps only when
-  `AZURE_STATIC_WEB_APPS_API_TOKEN` is present.
+- The `deploy` job uploads `src/main/webapp` to Cloudflare Pages only when
+  Cloudflare deployment settings are present.
 - Added workflow structure validation to the project test suite.
 
-### T-104: Static Web Apps configuration prep
+### T-104: Cloudflare Pages configuration prep
 
-- Added `src/main/webapp/staticwebapp.config.json` for Azure Static Web Apps.
-- Added `docs/deployment-azure-static-web-apps.md` with owner-only deployment
-  steps and cost guardrails.
-- Added automated validation for the Static Web Apps config file and optional
+- Added `src/main/webapp/_headers` and `src/main/webapp/_redirects` for
+  Cloudflare Pages.
+- Added `docs/deployment-cloudflare-pages.md` with owner-only deployment steps
+  and cost guardrails.
+- Added automated validation for the Cloudflare Pages config files and optional
   post-deployment smoke-test wiring.
-- No Azure resource was created and no DNS or paid service configuration was
+- No Cloudflare project, DNS record, token, or paid service configuration was
   performed.
+
+### Deployment pivot: Cloudflare Pages
+
+- Replaced `.github/workflows/azure-static-web-apps.yml` with
+  `.github/workflows/cloudflare-pages.yml`.
+- Replaced `src/main/webapp/staticwebapp.config.json` with Cloudflare Pages
+  `_headers` and `_redirects`.
+- Replaced Azure deployment handoff documentation with
+  `docs/deployment-cloudflare-pages.md`.
+- Updated deployment smoke-test wiring to use `BIOMED_PAGES_URL`.
+- No Cloudflare project, DNS record, token, or paid service was created.

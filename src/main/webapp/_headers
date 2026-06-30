@@ -1,0 +1,9 @@
+/*
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Content-Type-Options: nosniff
+
+/custom-config/*
+  Cache-Control: no-cache
+
+/custom-libraries/*
+  Cache-Control: no-cache
