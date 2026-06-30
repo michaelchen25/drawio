@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "node tests/verify-static-app.mjs",
-    "test": "node tests/verify-static-app.mjs && node tests/verify-custom-config.mjs",
-    "test:custom-config": "node tests/verify-custom-config.mjs"
+    "test": "node tests/verify-static-app.mjs && node tests/verify-custom-config.mjs && node tests/verify-github-actions.mjs",
+    "test:custom-config": "node tests/verify-custom-config.mjs",
+    "test:github-actions": "node tests/verify-github-actions.mjs"
   }
 }

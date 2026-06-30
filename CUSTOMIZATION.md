@@ -28,3 +28,11 @@ This file records every project-specific change made on top of the upstream
   module through draw.io's existing pre-configuration entry point.
 - Added an automated test that verifies `PreConfig.js` loads the custom module
   and that the module sets the expected project namespace.
+
+### T-103: GitHub Actions CI/CD
+
+- Added `.github/workflows/azure-static-web-apps.yml`.
+- The `validate` job runs automated tests on pushes and pull requests to `dev`.
+- The `deploy` job uploads `src/main/webapp` to Azure Static Web Apps only when
+  `AZURE_STATIC_WEB_APPS_API_TOKEN` is present.
+- Added workflow structure validation to the project test suite.
