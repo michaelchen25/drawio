@@ -31,4 +31,12 @@ if (!/if:\s*github\.event_name == 'push'/.test(workflow)) {
   throw new Error('Deploy job must be limited to push events');
 }
 
+if (!/if:\s*env\.AZURE_STATIC_WEB_APPS_API_TOKEN != ''/.test(workflow)) {
+  throw new Error('Deploy step must require the Azure Static Web Apps token');
+}
+
+if (!workflow.includes('skipping deployment')) {
+  throw new Error('Workflow must explicitly skip deployment until the Azure token is configured');
+}
+
 console.log('GitHub Actions workflow validation passed');
