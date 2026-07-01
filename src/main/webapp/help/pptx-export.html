@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PPTX Manual Conversion Guide</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        background: #ffffff;
+        color: #111111;
+      }
+
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+        line-height: 1.6;
+      }
+
+      h1, h2 {
+        margin: 0 0 12px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      h2 {
+        margin-top: 28px;
+        font-size: 20px;
+      }
+
+      ol, ul {
+        padding-left: 22px;
+      }
+
+      p, li {
+        font-size: 15px;
+      }
+
+      .note {
+        margin-top: 20px;
+        padding: 12px 14px;
+        border: 1px solid #111111;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>PPTX Manual Conversion Guide</h1>
+      <p>
+        This MVP does not provide one-click PPTX export. Use SVG export, then
+        convert the diagram inside Microsoft PowerPoint.
+      </p>
+
+      <h2>Recommended Path</h2>
+      <ol>
+        <li>Open the diagram in the biomed flowchart editor.</li>
+        <li>Choose <strong>File -&gt; Export as -&gt; SVG</strong>.</li>
+        <li>Save the exported SVG file.</li>
+        <li>Open Microsoft PowerPoint desktop app.</li>
+        <li>Insert the SVG onto a slide.</li>
+        <li>Right-click the SVG and choose <strong>Convert to Shape</strong>.</li>
+      </ol>
+
+      <h2>What to Expect</h2>
+      <ul>
+        <li>Standard ISO 5807 shapes usually convert best.</li>
+        <li>Custom biomed shapes may split into many pieces after conversion.</li>
+        <li>If you only need a report image, keep the SVG as-is.</li>
+      </ul>
+
+      <h2>Known Limits</h2>
+      <ul>
+        <li>This MVP does not provide one-click PPTX export.</li>
+        <li>PowerPoint on the web may not support the same editing workflow.</li>
+        <li>Desktop PowerPoint is recommended for the best conversion result.</li>
+      </ul>
+
+      <div class="note">
+        Keep the original <code>.drawio</code> file in Microsoft 365 OneDrive
+        for Business as the editable source of truth.
+      </div>
+    </main>
+  </body>
+</html>

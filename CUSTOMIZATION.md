@@ -171,3 +171,15 @@ This file records every project-specific change made on top of the upstream
   guidance for refining Mermaid drafts with the biomed libraries.
 - Added automated validation so the required guide coverage stays present in
   future edits.
+
+### T-160: PPTX export hint
+
+- Added `src/main/webapp/custom-config/export-pptx-hint.js` to patch the
+  existing export dialog through the plugin layer instead of editing draw.io
+  core files.
+- Updated `src/main/webapp/custom-config/app-config.js` to load the PPTX export
+  hint plugin alongside the existing auth plugin.
+- Added `src/main/webapp/help/pptx-export.html` as the deployed help page that
+  the export dialog links to for the manual SVG-to-PowerPoint workflow.
+- Added automated validation for plugin registration, export-dialog hint
+  injection, and help-page coverage.

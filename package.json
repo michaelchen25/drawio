@@ -6,10 +6,11 @@
   "type": "module",
   "scripts": {
     "build": "npm test",
-    "test": "node tests/verify-static-app.mjs && node tests/verify-custom-config.mjs && node tests/verify-auth-msal.mjs && node tests/verify-onedrive-business-storage.mjs && node tests/verify-iso5807-library.mjs && node tests/verify-tooltip-review.mjs && node tests/verify-quality-system-library.mjs && node tests/verify-lab-templates-library.mjs && node tests/verify-antibody-process-library.mjs && node tests/verify-cart-process-library.mjs && node tests/verify-user-guides.mjs && node tests/verify-github-actions.mjs && node tests/verify-cloudflare-pages-config.mjs",
+    "test": "node tests/verify-static-app.mjs && node tests/verify-custom-config.mjs && node tests/verify-auth-msal.mjs && node tests/verify-onedrive-business-storage.mjs && node tests/verify-export-pptx-hint.mjs && node tests/verify-iso5807-library.mjs && node tests/verify-tooltip-review.mjs && node tests/verify-quality-system-library.mjs && node tests/verify-lab-templates-library.mjs && node tests/verify-antibody-process-library.mjs && node tests/verify-cart-process-library.mjs && node tests/verify-user-guides.mjs && node tests/verify-github-actions.mjs && node tests/verify-cloudflare-pages-config.mjs",
     "test:auth-msal": "node tests/verify-auth-msal.mjs",
     "test:custom-config": "node tests/verify-custom-config.mjs",
     "test:deployed": "node tests/verify-deployed-static-app.mjs",
+    "test:export-pptx-hint": "node tests/verify-export-pptx-hint.mjs",
     "test:github-actions": "node tests/verify-github-actions.mjs",
     "test:iso5807-library": "node tests/verify-iso5807-library.mjs",
     "test:onedrive-business-storage": "node tests/verify-onedrive-business-storage.mjs",
