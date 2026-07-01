@@ -10,30 +10,20 @@ project owner.
 - Cloudflare Pages config files:
   - `src/main/webapp/_headers`
   - `src/main/webapp/_redirects`
-- GitHub Actions workflow: `.github/workflows/cloudflare-pages.yml`
-- Required GitHub secrets:
-  - `CLOUDFLARE_API_TOKEN`
-  - `CLOUDFLARE_ACCOUNT_ID`
-- Required GitHub variable:
-  - `CLOUDFLARE_PAGES_PROJECT_NAME`
+- GitHub Actions validation workflow: `.github/workflows/cloudflare-pages.yml`
+- Deployment path: Cloudflare Pages native Git integration. GitHub Actions does
+  not run a second Wrangler deployment.
 
 ## Owner actions required
 
 1. Create one Cloudflare Pages project on the Free plan.
-2. Use this repository as the source, or create the project manually and let
-   GitHub Actions deploy with Wrangler.
+2. Use this repository as the source through Cloudflare Pages Git integration.
 3. Configure project build settings:
-   - Build command: leave empty
+   - Build command: `npm run build`
    - Build output directory: `src/main/webapp`
    - Root directory: repository root
-4. Create a Cloudflare API token scoped only for Pages deployment.
-5. Add GitHub secrets:
-   - `CLOUDFLARE_API_TOKEN`
-   - `CLOUDFLARE_ACCOUNT_ID`
-6. Add GitHub variable:
-   - `CLOUDFLARE_PAGES_PROJECT_NAME`
-7. Push the `dev` branch or manually run the workflow.
-8. After deployment, open the generated `*.pages.dev` URL and confirm the
+4. Push the `dev` branch.
+5. After deployment, open the generated `*.pages.dev` URL and confirm the
    editor loads.
 
 ## Cost guardrails

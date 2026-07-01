@@ -5,7 +5,7 @@
   "description": "Project-level validation scripts for the biomed draw.io fork.",
   "type": "module",
   "scripts": {
-    "build": "node tests/verify-static-app.mjs",
+    "build": "npm test",
     "test": "node tests/verify-static-app.mjs && node tests/verify-custom-config.mjs && node tests/verify-iso5807-library.mjs && node tests/verify-github-actions.mjs && node tests/verify-cloudflare-pages-config.mjs",
     "test:custom-config": "node tests/verify-custom-config.mjs",
     "test:deployed": "node tests/verify-deployed-static-app.mjs",

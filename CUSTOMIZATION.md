@@ -33,8 +33,8 @@ This file records every project-specific change made on top of the upstream
 
 - Added `.github/workflows/cloudflare-pages.yml`.
 - The `validate` job runs automated tests on pushes and pull requests to `dev`.
-- The `deploy` job uploads `src/main/webapp` to Cloudflare Pages only when
-  Cloudflare deployment settings are present.
+- Deployment is handled by Cloudflare Pages native Git integration to avoid a
+  duplicate Wrangler deploy job.
 - Added workflow structure validation to the project test suite.
 
 ### T-104: Cloudflare Pages configuration prep
@@ -45,6 +45,8 @@ This file records every project-specific change made on top of the upstream
   and cost guardrails.
 - Added automated validation for the Cloudflare Pages config files and optional
   post-deployment smoke-test wiring.
+- Configured `npm run build` to run the complete automated test suite before
+  Cloudflare Pages publishes `src/main/webapp`.
 - No Cloudflare project, DNS record, token, or paid service configuration was
   performed.
 
