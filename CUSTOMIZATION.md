@@ -156,5 +156,18 @@ This file records every project-specific change made on top of the upstream
   auth mode from the plugin layer so company sign-in and OneDrive for Business
   share the same Entra session.
 - Added automated validation for Microsoft 365 storage flags, Graph app
-  identifiers, external-auth bridge payloads, and removal of the personal
-  OneDrive UI entry.
+  identifiers, external-auth bridge payloads, removal of the personal
+  OneDrive UI entry, and `.drawio` save/read round-trip behavior in the
+  Microsoft 365 storage path.
+
+### T-150: User guides
+
+- Added `docs/user-guide-pptx.md` with the MVP manual SVG-to-PowerPoint
+  workflow and the known limits around custom biomed shapes and PowerPoint on
+  the web.
+- Added `docs/user-guide-onedrive-sharing.md` with the Microsoft 365 save path,
+  native OneDrive sharing flow, and the shared-folder workaround.
+- Added `docs/user-guide-mermaid.md` with the `Insert -> Mermaid` workflow and
+  guidance for refining Mermaid drafts with the biomed libraries.
+- Added automated validation so the required guide coverage stays present in
+  future edits.
