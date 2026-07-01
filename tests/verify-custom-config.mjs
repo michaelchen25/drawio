@@ -7,6 +7,7 @@ const preConfigPath = join(repoRoot, 'src/main/webapp/js/PreConfig.js');
 const appConfigPath = join(repoRoot, 'src/main/webapp/custom-config/app-config.js');
 const isoLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/iso5807.xml');
 const qualitySystemLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/quality-system.xml');
+const labTemplatesLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/lab-templates.xml');
 
 const mxscriptCalls = [];
 const preConfigContext = createContext({
@@ -60,6 +61,10 @@ if (!drawioConfig?.defaultLibraries?.split(';').includes('quality-system')) {
   throw new Error('Custom app config did not enable the Quality System custom library by default');
 }
 
+if (!drawioConfig?.defaultLibraries?.split(';').includes('lab-templates')) {
+  throw new Error('Custom app config did not enable the Lab Templates custom library by default');
+}
+
 const isoSection = drawioConfig?.libraries?.find((section) => section?.id === 'iso5807');
 const isoEntry = isoSection?.entries?.find((entry) => entry?.id === 'iso5807');
 const isoLib = isoEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/iso5807.xml');
@@ -74,6 +79,14 @@ const qualitySystemLib = qualitySystemEntry?.libs?.find((lib) => lib?.url === 'c
 
 if (qualitySystemLib?.preload !== true || qualitySystemLib?.title?.main !== 'Quality System') {
   throw new Error('Custom app config did not register the expected Quality System library entry');
+}
+
+const labTemplatesSection = drawioConfig?.libraries?.find((section) => section?.id === 'lab-templates');
+const labTemplatesEntry = labTemplatesSection?.entries?.find((entry) => entry?.id === 'lab-templates');
+const labTemplatesLib = labTemplatesEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/lab-templates.xml');
+
+if (labTemplatesLib?.preload !== true || labTemplatesLib?.title?.main !== 'Lab Templates') {
+  throw new Error('Custom app config did not register the expected Lab Templates library entry');
 }
 
 const isoLibraryXml = await readFile(isoLibraryPath, 'utf8');
@@ -104,6 +117,19 @@ const qualitySystemLibraryEntries = JSON.parse(qualitySystemLibraryJson);
 
 if (qualitySystemLibraryEntries.length !== 10 || qualitySystemLibraryEntries[0].id !== 'change-control-impact') {
   throw new Error('Quality System custom library does not contain the expected 10 shape entries');
+}
+
+const labTemplatesLibraryXml = await readFile(labTemplatesLibraryPath, 'utf8');
+const labTemplatesLibraryJson = labTemplatesLibraryXml.match(/<mxlibrary><!\[CDATA\[([\s\S]*)\]\]><\/mxlibrary>/)?.[1];
+
+if (labTemplatesLibraryJson == null) {
+  throw new Error('Lab Templates custom library is not wrapped in an mxlibrary CDATA block');
+}
+
+const labTemplatesLibraryEntries = JSON.parse(labTemplatesLibraryJson);
+
+if (labTemplatesLibraryEntries.length !== 7 || labTemplatesLibraryEntries[0].id !== 'flow-cytometry') {
+  throw new Error('Lab Templates custom library does not contain the expected 7 template entries');
 }
 
 console.log('Custom configuration entry point test passed');

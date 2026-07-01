@@ -3,7 +3,7 @@
 	'use strict';
 
 	var root = window;
-	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system';
+	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system;lab-templates';
 	var customLibraries = [
 		{
 			id: 'iso5807',
@@ -45,6 +45,29 @@
 								main: 'Quality System'
 							},
 							url: 'custom-libraries/quality-system.xml',
+							preload: true
+						}
+					]
+				}
+			]
+		},
+		{
+			id: 'lab-templates',
+			title: {
+				main: 'Lab Templates'
+			},
+			entries: [
+				{
+					id: 'lab-templates',
+					title: {
+						main: 'Lab Templates'
+					},
+					libs: [
+						{
+							title: {
+								main: 'Lab Templates'
+							},
+							url: 'custom-libraries/lab-templates.xml',
 							preload: true
 						}
 					]
