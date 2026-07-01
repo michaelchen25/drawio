@@ -8,6 +8,7 @@ const appConfigPath = join(repoRoot, 'src/main/webapp/custom-config/app-config.j
 const isoLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/iso5807.xml');
 const qualitySystemLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/quality-system.xml');
 const labTemplatesLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/lab-templates.xml');
+const antibodyProcessLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/antibody-process.xml');
 
 const mxscriptCalls = [];
 const preConfigContext = createContext({
@@ -65,6 +66,10 @@ if (!drawioConfig?.defaultLibraries?.split(';').includes('lab-templates')) {
   throw new Error('Custom app config did not enable the Lab Templates custom library by default');
 }
 
+if (!drawioConfig?.defaultLibraries?.split(';').includes('antibody-process')) {
+  throw new Error('Custom app config did not enable the Antibody Process custom library by default');
+}
+
 const isoSection = drawioConfig?.libraries?.find((section) => section?.id === 'iso5807');
 const isoEntry = isoSection?.entries?.find((entry) => entry?.id === 'iso5807');
 const isoLib = isoEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/iso5807.xml');
@@ -87,6 +92,14 @@ const labTemplatesLib = labTemplatesEntry?.libs?.find((lib) => lib?.url === 'cus
 
 if (labTemplatesLib?.preload !== true || labTemplatesLib?.title?.main !== 'Lab Templates') {
   throw new Error('Custom app config did not register the expected Lab Templates library entry');
+}
+
+const antibodyProcessSection = drawioConfig?.libraries?.find((section) => section?.id === 'antibody-process');
+const antibodyProcessEntry = antibodyProcessSection?.entries?.find((entry) => entry?.id === 'antibody-process');
+const antibodyProcessLib = antibodyProcessEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/antibody-process.xml');
+
+if (antibodyProcessLib?.preload !== true || antibodyProcessLib?.title?.main !== 'Antibody Process') {
+  throw new Error('Custom app config did not register the expected Antibody Process library entry');
 }
 
 const isoLibraryXml = await readFile(isoLibraryPath, 'utf8');
@@ -130,6 +143,19 @@ const labTemplatesLibraryEntries = JSON.parse(labTemplatesLibraryJson);
 
 if (labTemplatesLibraryEntries.length !== 7 || labTemplatesLibraryEntries[0].id !== 'flow-cytometry') {
   throw new Error('Lab Templates custom library does not contain the expected 7 template entries');
+}
+
+const antibodyProcessLibraryXml = await readFile(antibodyProcessLibraryPath, 'utf8');
+const antibodyProcessLibraryJson = antibodyProcessLibraryXml.match(/<mxlibrary><!\[CDATA\[([\s\S]*)\]\]><\/mxlibrary>/)?.[1];
+
+if (antibodyProcessLibraryJson == null) {
+  throw new Error('Antibody Process custom library is not wrapped in an mxlibrary CDATA block');
+}
+
+const antibodyProcessLibraryEntries = JSON.parse(antibodyProcessLibraryJson);
+
+if (antibodyProcessLibraryEntries.length !== 15 || antibodyProcessLibraryEntries[0].id !== 'cell-line-development') {
+  throw new Error('Antibody Process custom library does not contain the expected 15 entries');
 }
 
 console.log('Custom configuration entry point test passed');

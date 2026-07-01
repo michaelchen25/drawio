@@ -3,7 +3,7 @@
 	'use strict';
 
 	var root = window;
-	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system;lab-templates';
+	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system;lab-templates;antibody-process';
 	var customLibraries = [
 		{
 			id: 'iso5807',
@@ -68,6 +68,29 @@
 								main: 'Lab Templates'
 							},
 							url: 'custom-libraries/lab-templates.xml',
+							preload: true
+						}
+					]
+				}
+			]
+		},
+		{
+			id: 'antibody-process',
+			title: {
+				main: 'Antibody Process'
+			},
+			entries: [
+				{
+					id: 'antibody-process',
+					title: {
+						main: 'Antibody Process'
+					},
+					libs: [
+						{
+							title: {
+								main: 'Antibody Process'
+							},
+							url: 'custom-libraries/antibody-process.xml',
 							preload: true
 						}
 					]

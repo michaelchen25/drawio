@@ -115,3 +115,12 @@ This file records every project-specific change made on top of the upstream
 - Added automated validation for template count, tooltip coverage, key node
   labels, ISO shape mapping, draw.io XML payloads, and the no-explicit-color
   requirement.
+
+### T-116: Antibody Process library
+
+- Added `src/main/webapp/custom-libraries/antibody-process.xml` with 15
+  antibody CMC process preset components from `SHAPE-GUIDE-biomed.md`.
+- Updated `src/main/webapp/custom-config/app-config.js` so the Antibody
+  Process library appears in the sidebar by default.
+- Added automated validation for entry count, tooltip coverage, labels, ISO
+  shape mapping, draw.io XML payloads, and the no-explicit-color requirement.
