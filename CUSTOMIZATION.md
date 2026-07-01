@@ -61,11 +61,22 @@ This file records every project-specific change made on top of the upstream
 - Updated `src/main/webapp/custom-config/app-config.js` to register custom
   sidebar libraries through draw.io's existing `DRAWIO_CONFIG.libraries`
   mechanism.
-- Added `src/main/webapp/custom-libraries/test-library.xml` as a minimal
-  black-and-white test library for validating the loading path before adding
-  production ISO 5807 and biomed libraries.
+- Added a minimal black-and-white test library for validating the loading path
+  before adding production ISO 5807 and biomed libraries, then replaced the
+  visible sidebar entry with the ISO 5807 library in T-111.
 - Extended the custom config test to verify the sidebar library section,
-  library URL, preload flag, and test library XML payload.
+  library URL, preload flag, and library XML payload.
+
+### T-111/T-112: ISO 5807 library and tooltip data
+
+- Added `src/main/webapp/custom-libraries/tooltips.json` with the ISO 5807
+  tooltip text from `SHAPE-GUIDE-biomed.md`.
+- Added `src/main/webapp/custom-libraries/iso5807.xml` with 19 ISO 5807
+  entries using existing draw.io/ISO flowchart shapes only.
+- Updated `src/main/webapp/custom-config/app-config.js` so the ISO 5807
+  library appears in the sidebar by default.
+- Added automated validation for ISO entry count, tooltip coverage, draw.io XML
+  payloads, and the no-explicit-color requirement.
 
 ### Deployment pivot: Cloudflare Pages
 

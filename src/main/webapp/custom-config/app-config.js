@@ -3,25 +3,25 @@
 	'use strict';
 
 	var root = window;
-	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;biomed-test';
+	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807';
 	var customLibraries = [
 		{
-			id: 'biomed-test',
+			id: 'iso5807',
 			title: {
-				main: 'Biomed Test Library'
+				main: 'ISO 5807'
 			},
 			entries: [
 				{
-					id: 'biomed-test',
+					id: 'iso5807',
 					title: {
-						main: 'Biomed Test Library'
+						main: 'ISO 5807 Basic Symbols'
 					},
 					libs: [
 						{
 							title: {
-								main: 'Biomed Test Shapes'
+								main: 'ISO 5807 Basic Symbols'
 							},
-							url: 'custom-libraries/test-library.xml',
+							url: 'custom-libraries/iso5807.xml',
 							preload: true
 						}
 					]

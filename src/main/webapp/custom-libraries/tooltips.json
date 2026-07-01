@@ -1,0 +1,84 @@
+{
+  "metadata": {
+    "source": "SHAPE-GUIDE-biomed.md",
+    "version": "0.1.0",
+    "reviewStatus": {
+      "iso5807": "ready",
+      "biomed": "draft-needs-domain-review"
+    }
+  },
+  "iso5807": {
+    "terminator": "流程的開始或結束點。例：「收到檢體」「批次放行完成」「回輸給病人」。勿用於中間步驟。",
+    "process": "任何造成狀態改變的動作。例：「離心」「加入一抗」「壓錠」「細胞培養」。",
+    "decision": "有 yes/no 分支的判斷。例：「OD 值 > 1.0？」「是否符合規格？」「QA 是否放行？」。勿用矩形寫判斷。",
+    "predefined-process": "引用既定 SOP 子流程。例：「偏差調查」「CAPA」「Protein A 捕獲」「QC 檢驗」。",
+    "data-io": "一般資料輸入輸出。例：「輸入樣品清單」「輸出結果資料」。",
+    "document": "產出或參照單一文件。例：「填寫批次紀錄」「產生 CoA」。勿用 Process 矩形。",
+    "multi-document": "多份文件。例：「彙整多批 CoA」「收集各站紀錄」。",
+    "stored-data": "資料寫入已存系統。例：「LIMS 登錄結果」「ERP 入帳」。",
+    "internal-storage": "內部記憶儲存（生醫少用，多用於系統流程圖）。",
+    "database": "直接存取資料庫。例：「查 stability database」。",
+    "manual-input": "由人手動鍵入資料。例：「手動秤重輸入」「天平讀數鍵入」。",
+    "manual-operation": "需人工執行、無法自動化的步驟。例：「目視檢查」「貼標」「QP 簽署放行」。",
+    "display": "資料顯示供人閱讀。例：「儀器螢幕顯示結果」「gating 畫面」。",
+    "preparation": "設定、初始化、迴圈起點。例：「設定 E:T 比例」「重複 3 次」。",
+    "connector": "同頁流程線的中斷與接續，相同編號配對，用於避免線交叉。",
+    "off-page-connector": "流程跨頁延續。例：「續下頁」。",
+    "punched-tape": "紙帶輸入（早期媒介，生醫不適用，保留以求 ISO 完整性）。",
+    "merge-extract": "資料的合併或分離。",
+    "delay": "流程中的等待或暫存。例：「靜置 24 小時」「孵育過夜」「隔離待驗」。勿用 Process 矩形。"
+  },
+  "qualitySystem": {
+    "change-control-impact": "變更管制的影響範圍判斷。先用 Decision 分流，再引用既定審查 SOP。",
+    "change-control-review": "變更審查既定流程。用於影響評估、核准與執行追蹤的 SOP 子流程。",
+    "deviation-investigation": "偏差調查既定流程。用於事件紀錄、根因分析、影響評估與結案。",
+    "capa": "CAPA 既定流程。用於根因分析後的矯正預防措施、執行與效果確認。",
+    "oos-oot-investigation": "OOS/OOT 調查既定流程。用於超規格或趨勢外結果的實驗室/製程調查。",
+    "risk-high": "風險等級判斷。用於分流高風險事件、變更或偏差的處置路徑。",
+    "qa-approval": "QA/QP 是否核准的決策點。用 Decision 表示 yes/no 分支。",
+    "qp-release-signature": "人工核准或簽署動作。例：QP 簽署放行，屬不可自動化人工作業。",
+    "document-control": "文件管制既定流程。用於文件建立、審核、核准、發行與作廢。",
+    "record-archive": "紀錄歸檔或系統登錄。用於批次紀錄、檢驗結果或品質紀錄保存。"
+  },
+  "labTemplates": {
+    "flow-cytometry": "流式細胞術流程模板。涵蓋染色、孵育、上機讀取、gating 與報告輸出。",
+    "western-blot": "Western blot 流程模板。涵蓋裂解、定量、電泳、轉印、抗體孵育、顯影與判讀。",
+    "t-cell-cytotoxicity": "T 細胞毒殺試驗模板。涵蓋 E:T 比例設定、共培養、孵育、測量與閾值判斷。",
+    "elisa": "ELISA 流程模板。涵蓋包被、封閉、加樣、孵育、呈色、讀盤與標準曲線判斷。",
+    "gene-cloning": "基因選殖流程模板。涵蓋 PCR、酶切/接合、轉形、培養、挑菌、定序確認。",
+    "transfection-transduction": "轉染/轉導流程模板。涵蓋細胞鋪盤、複合物或病毒準備、孵育、效率測量與篩選。",
+    "protein-purification": "蛋白純化流程模板。涵蓋澄清、親和層析、洗脫、換液、純度判斷與 QC 報告。"
+  },
+  "antibodyProcess": {
+    "cell-line-development": "細胞株開發既定流程。用於篩選高表現細胞株與建立生產株。",
+    "seed-train": "種子擴增步驟。用於逐級放大細胞，銜接生物反應器生產。",
+    "bioreactor-culture": "細胞培養/生物反應器。用於細胞擴增與抗體生產。",
+    "harvest": "收穫步驟。用於分離細胞與上清，銜接下游純化。",
+    "clarification": "澄清步驟。用離心或深層過濾去除細胞與碎片。",
+    "protein-a-capture": "Protein A 捕獲既定流程。用於抗體親和層析平台步驟。",
+    "intermediate-polishing-chromatography": "中間/精製層析既定流程。用於離子交換或疏水層析等純化步驟。",
+    "viral-clearance-filtration": "病毒清除/過濾既定流程。用於病毒安全性控制，屬法規關鍵步驟。",
+    "bds-filtration": "原料藥過濾步驟。用於最終 BDS 過濾與進入配方前處理。",
+    "formulation": "配方步驟。用於調整成最終配方條件。",
+    "fill-finish": "無菌充填步驟。用於無菌條件下充填成品。",
+    "qc-testing": "QC 檢驗既定流程。用於依既定 SOP 完成放行檢驗。",
+    "batch-release": "批次放行決策。用於 QA/QP 判斷是否放行。",
+    "cryopreservation": "冷凍保存步驟。用於低溫保存中間品或最終產品。",
+    "cold-chain-shipping": "冷鏈運輸步驟。用於溫控條件下配送或轉運。"
+  },
+  "cartProcess": {
+    "leukapheresis": "白血球分離術。從病人血液採集 PBMC，作為自體 CAR-T 起始物。",
+    "cold-chain-shipping": "冷鏈運輸步驟。用於病人材料或產品的溫控轉運。",
+    "thaw": "解凍步驟。用於冷凍起始物或中間品回到可操作狀態。",
+    "t-cell-enrichment": "T 細胞富集/選別既定流程。通常使用免疫磁珠選別 T 細胞。",
+    "t-cell-activation": "T 細胞活化步驟。例：anti-CD3/CD28 活化，準備進入基因導入。",
+    "viral-transduction": "病毒轉導步驟。用病毒載體導入 CAR 基因。",
+    "ex-vivo-expansion": "Ex vivo 擴增步驟。培養擴增 7-14 天，常搭配 Delay 表示等待。",
+    "formulation": "配方步驟。用於調整細胞產品至最終配方。",
+    "drug-product-fill": "製劑充填入袋。用於將 DS/DP 充填至輸注袋。",
+    "qc-testing": "QC 檢驗既定流程。用於依既定 SOP 完成放行檢驗。",
+    "batch-release": "批次放行決策。用於 QA/QP 判斷是否放行。",
+    "cryopreservation": "冷凍保存步驟。用於低溫保存 CAR-T 細胞產品。",
+    "infusion": "回輸給病人的流程終點。用 Terminator 表示 CAR-T 自體流程結束。"
+  }
+}
