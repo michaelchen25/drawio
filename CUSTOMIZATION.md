@@ -79,6 +79,9 @@ This file records every project-specific change made on top of the upstream
   library appears in the sidebar by default.
 - Added automated validation for ISO entry count, tooltip coverage, draw.io XML
   payloads, and the no-explicit-color requirement.
+- Added `docs/tooltip-review-biomed.md` as the domain-review checklist for
+  biomed tooltip drafts, with automated coverage validation to prevent missing
+  review rows.
 
 ### Deployment pivot: Cloudflare Pages
 
