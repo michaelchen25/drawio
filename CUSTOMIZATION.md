@@ -94,6 +94,8 @@ This file records every project-specific change made on top of the upstream
 - Replaced Azure deployment handoff documentation with
   `docs/deployment-cloudflare-pages.md`.
 - Updated deployment smoke-test wiring to use `BIOMED_PAGES_URL`.
+- Expanded the deployed smoke test to verify the admin dashboard and PPTX help
+  page content after Cloudflare Pages publishes the site.
 - No Cloudflare project, DNS record, token, or paid service was created.
 
 ### T-114: Quality System library
