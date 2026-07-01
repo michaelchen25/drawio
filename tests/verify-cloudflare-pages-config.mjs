@@ -19,8 +19,15 @@ for (const requiredHeader of [
   }
 }
 
-if (!redirects.split(/\r?\n/).some((line) => line.trim() === '/* /index.html 200')) {
-  throw new Error('Cloudflare _redirects must define SPA fallback: /* /index.html 200');
+const redirectRules = redirects
+  .split(/\r?\n/)
+  .map((line) => line.trim())
+  .filter((line) => line !== '' && !line.startsWith('#'));
+
+for (const rule of redirectRules) {
+  if (/^\/\*\s+\/index\.html\s+200(?:\s|$)/.test(rule)) {
+    throw new Error('Cloudflare _redirects must not define a catch-all /index.html rewrite; Cloudflare treats it as an infinite loop');
+  }
 }
 
 console.log('Cloudflare Pages configuration validation passed');

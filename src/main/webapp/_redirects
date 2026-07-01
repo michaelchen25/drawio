@@ -1,1 +1,5 @@
-/* /index.html 200
+# Cloudflare Pages redirects
+#
+# No SPA fallback is defined here. draw.io is served as a static webapp with
+# concrete HTML entry points; a catch-all rewrite to /index.html creates an
+# infinite-loop warning in Cloudflare Pages.
