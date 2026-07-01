@@ -28,7 +28,7 @@ Review action:
 | risk-high | 風險等級判斷。用於分流高風險事件、變更或偏差的處置路徑。 |  |  |
 | qa-approval | QA/QP 是否核准的決策點。用 Decision 表示 yes/no 分支。 |  |  |
 | qp-release-signature | 人工核准或簽署動作。例：QP 簽署放行，屬不可自動化人工作業。 |  |  |
-| document-control | 文件管制既定流程。用於文件建立、審核、核准、發行與作廢。 |  |  |
+| document-control | 文件管制既定流程。用於文件建立、審查、核准、發行與作廢。 |  |  |
 | record-archive | 紀錄歸檔或系統登錄。用於批次紀錄、檢驗結果或品質紀錄保存。 |  |  |
 
 ## Lab Templates

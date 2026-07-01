@@ -13,9 +13,9 @@
     "decision": "有 yes/no 分支的判斷。例：「OD 值 > 1.0？」「是否符合規格？」「QA 是否放行？」。勿用矩形寫判斷。",
     "predefined-process": "引用既定 SOP 子流程。例：「偏差調查」「CAPA」「Protein A 捕獲」「QC 檢驗」。",
     "data-io": "一般資料輸入輸出。例：「輸入樣品清單」「輸出結果資料」。",
-    "document": "產出或參照單一文件。例：「填寫批次紀錄」「產生 CoA」。勿用 Process 矩形。",
+    "document": "產出或參照單一文件。例：「填寫批次紀錄」「產出 CoA」。勿用 Process 矩形。",
     "multi-document": "多份文件。例：「彙整多批 CoA」「收集各站紀錄」。",
-    "stored-data": "資料寫入已存系統。例：「LIMS 登錄結果」「ERP 入帳」。",
+    "stored-data": "資料寫入既有系統。例：「將結果記錄至 LIMS」「ERP 入帳」。",
     "internal-storage": "內部記憶儲存（生醫少用，多用於系統流程圖）。",
     "database": "直接存取資料庫。例：「查 stability database」。",
     "manual-input": "由人手動鍵入資料。例：「手動秤重輸入」「天平讀數鍵入」。",
@@ -37,7 +37,7 @@
     "risk-high": "風險等級判斷。用於分流高風險事件、變更或偏差的處置路徑。",
     "qa-approval": "QA/QP 是否核准的決策點。用 Decision 表示 yes/no 分支。",
     "qp-release-signature": "人工核准或簽署動作。例：QP 簽署放行，屬不可自動化人工作業。",
-    "document-control": "文件管制既定流程。用於文件建立、審核、核准、發行與作廢。",
+    "document-control": "文件管制既定流程。用於文件建立、審查、核准、發行與作廢。",
     "record-archive": "紀錄歸檔或系統登錄。用於批次紀錄、檢驗結果或品質紀錄保存。"
   },
   "labTemplates": {
