@@ -133,3 +133,12 @@ This file records every project-specific change made on top of the upstream
   library appears in the sidebar by default.
 - Added automated validation for entry count, tooltip coverage, labels, ISO
   shape mapping, draw.io XML payloads, and the no-explicit-color requirement.
+
+### T-120: MSAL / Entra ID login integration
+
+- Added `src/main/webapp/custom-config/auth-msal.js` as the project-owned
+  single-tenant Entra ID auth module.
+- Updated `src/main/webapp/custom-config/app-config.js` to register the auth
+  module as a draw.io plugin without touching editor core files.
+- Added automated validation for tenant/client IDs, redirect URIs, Graph
+  scopes, supported-origin checks, and non-company-account rejection behavior.

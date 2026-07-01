@@ -5,6 +5,7 @@ import { join, resolve } from 'node:path';
 const repoRoot = resolve(new URL('..', import.meta.url).pathname);
 const preConfigPath = join(repoRoot, 'src/main/webapp/js/PreConfig.js');
 const appConfigPath = join(repoRoot, 'src/main/webapp/custom-config/app-config.js');
+const authConfigPath = join(repoRoot, 'src/main/webapp/custom-config/auth-msal.js');
 const isoLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/iso5807.xml');
 const qualitySystemLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/quality-system.xml');
 const labTemplatesLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/lab-templates.xml');
@@ -32,7 +33,7 @@ if (preConfigContext.urlParams.sync !== 'manual') {
   throw new Error('PreConfig no longer preserves manual sync mode');
 }
 
-const appConfigContext = createContext({ window: {} });
+const appConfigContext = createContext({ window: {}, urlParams: {} });
 new Script(await readFile(appConfigPath, 'utf8'), { filename: appConfigPath }).runInContext(appConfigContext);
 
 const projectConfig = appConfigContext.window.BIOMED_FLOWCHART_EDITOR;
@@ -42,11 +43,19 @@ if (appConfigContext.window.BIOMED_APP_CONFIG_LOADED !== true) {
 }
 
 if (projectConfig?.version !== '0.1.0' || projectConfig?.configLoaded !== true) {
-  throw new Error('Custom app config did not expose the expected project namespace');
+	throw new Error('Custom app config did not expose the expected project namespace');
+}
+
+if (projectConfig?.authPluginPath !== 'custom-config/auth-msal.js') {
+	throw new Error('Custom app config did not expose the expected auth plugin path');
+}
+
+if (appConfigContext.urlParams.p !== 'custom-config/auth-msal.js') {
+	throw new Error('Custom app config did not register the auth plugin in urlParams.p');
 }
 
 if (!Array.isArray(projectConfig.customLibraries)) {
-  throw new Error('Custom app config did not initialize the custom library list');
+	throw new Error('Custom app config did not initialize the custom library list');
 }
 
 const drawioConfig = appConfigContext.window.DRAWIO_CONFIG;
@@ -181,7 +190,17 @@ if (cartProcessLibraryJson == null) {
 const cartProcessLibraryEntries = JSON.parse(cartProcessLibraryJson);
 
 if (cartProcessLibraryEntries.length !== 13 || cartProcessLibraryEntries[0].id !== 'leukapheresis') {
-  throw new Error('CAR-T Process custom library does not contain the expected 13 entries');
+	throw new Error('CAR-T Process custom library does not contain the expected 13 entries');
+}
+
+const authConfigScript = await readFile(authConfigPath, 'utf8');
+
+if (!authConfigScript.includes('70d8b9a4-3050-4f09-9f6c-23edb16595b6')) {
+	throw new Error('MSAL auth config file does not include the expected client ID');
+}
+
+if (!authConfigScript.includes('a0485c91-c913-4c24-853d-30728fcb5843')) {
+	throw new Error('MSAL auth config file does not include the expected tenant ID');
 }
 
 console.log('Custom configuration entry point test passed');

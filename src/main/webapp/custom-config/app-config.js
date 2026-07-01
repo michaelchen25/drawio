@@ -3,6 +3,7 @@
 	'use strict';
 
 	var root = window;
+	var authPluginPath = 'custom-config/auth-msal.js';
 	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system;lab-templates;antibody-process;cart-process';
 	var customLibraries = [
 		{
@@ -125,8 +126,21 @@
 	root.BIOMED_FLOWCHART_EDITOR = {
 		version: '0.1.0',
 		configLoaded: true,
-		customLibraries: customLibraries
+		customLibraries: customLibraries,
+		authPluginPath: authPluginPath
 	};
+
+	if (typeof urlParams === 'object' && urlParams != null)
+	{
+		var pluginPaths = (urlParams.p != null && urlParams.p.length > 0) ?
+			urlParams.p.split(';') : [];
+
+		if (pluginPaths.indexOf(authPluginPath) < 0)
+		{
+			pluginPaths.push(authPluginPath);
+			urlParams.p = pluginPaths.join(';');
+		}
+	}
 
 	root.DRAWIO_CONFIG = Object.assign({}, root.DRAWIO_CONFIG || {}, {
 		appendCustomLibraries: true,
