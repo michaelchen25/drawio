@@ -4,6 +4,8 @@
 
 	var root = window;
 	var authPluginPath = 'custom-config/auth-msal.js';
+	var entraClientId = '70d8b9a4-3050-4f09-9f6c-23edb16595b6';
+	var entraTenantId = 'a0485c91-c913-4c24-853d-30728fcb5843';
 	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system;lab-templates;antibody-process;cart-process';
 	var customLibraries = [
 		{
@@ -127,8 +129,17 @@
 		version: '0.1.0',
 		configLoaded: true,
 		customLibraries: customLibraries,
-		authPluginPath: authPluginPath
+		authPluginPath: authPluginPath,
+		entraClientId: entraClientId,
+		entraTenantId: entraTenantId,
+		oneDriveConfig: {
+			enablePersonalOneDrive: false,
+			enableMicrosoft365: true
+		}
 	};
+
+	root.DRAWIO_MSGRAPH_CLIENT_ID = entraClientId;
+	root.DRAWIO_MSGRAPH_TENANT_ID = entraTenantId;
 
 	if (typeof urlParams === 'object' && urlParams != null)
 	{
@@ -140,6 +151,9 @@
 			pluginPaths.push(authPluginPath);
 			urlParams.p = pluginPaths.join(';');
 		}
+
+		urlParams.od = '0';
+		urlParams.ms365 = '1';
 	}
 
 	root.DRAWIO_CONFIG = Object.assign({}, root.DRAWIO_CONFIG || {}, {

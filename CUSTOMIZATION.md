@@ -142,3 +142,19 @@ This file records every project-specific change made on top of the upstream
   module as a draw.io plugin without touching editor core files.
 - Added automated validation for tenant/client IDs, redirect URIs, Graph
   scopes, supported-origin checks, and non-company-account rejection behavior.
+
+### T-130: OneDrive for Business storage wiring
+
+- Updated `src/main/webapp/custom-config/app-config.js` to publish the tenant
+  and client IDs through draw.io's existing Microsoft Graph globals and to
+  disable the personal OneDrive entry while keeping Microsoft 365 storage
+  enabled.
+- Updated `src/main/webapp/custom-config/auth-msal.js` to bridge MSAL access
+  tokens into draw.io's native external OneDrive auth callback without editing
+  the upstream storage client.
+- Reused draw.io's built-in `m365` storage mode and forced it into external
+  auth mode from the plugin layer so company sign-in and OneDrive for Business
+  share the same Entra session.
+- Added automated validation for Microsoft 365 storage flags, Graph app
+  identifiers, external-auth bridge payloads, and removal of the personal
+  OneDrive UI entry.

@@ -99,6 +99,7 @@ async function loadAuthContext(options = {})
 {
 	const pluginCalls = [];
 	const msal = createMsalStub(options.msalOptions);
+	const mxResourcesCalls = [];
 	const context = createContext({
 		window: {
 			location: {
@@ -113,12 +114,15 @@ async function loadAuthContext(options = {})
 		Draw: {
 			loadPlugin: (callback) => pluginCalls.push(callback)
 		},
+		mxResources: {
+			parse: (value) => mxResourcesCalls.push(value)
+		},
 		console
 	});
 
 	new Script(await readFile(authPath, 'utf8'), {filename: authPath}).runInContext(context);
 
-	return {context, pluginCalls, msal};
+	return {context, pluginCalls, msal, mxResourcesCalls};
 }
 
 const {context, pluginCalls, msal} = await loadAuthContext();
@@ -134,6 +138,10 @@ if (auth?.clientId !== clientId || auth?.tenantId !== tenantId) {
 
 if (pluginCalls.length !== 1) {
 	throw new Error('MSAL auth config did not register exactly one draw.io plugin');
+}
+
+if (typeof auth?.bridgeOneDriveAuth !== 'function' || typeof auth?.configureStorageUi !== 'function') {
+	throw new Error('MSAL auth config did not expose the expected OneDrive bridge helpers');
 }
 
 if (!auth.redirectUris.includes('https://drawio-a7q.pages.dev') ||
@@ -225,6 +233,64 @@ catch (err) {
 
 if (unsupportedError?.code !== 'unsupported_origin') {
 	throw new Error('MSAL auth did not reject unsupported origins with the expected error');
+}
+
+const fakeActions = {
+	added: [],
+	addAction(name, handler) {
+		this.added.push({name, handler});
+	}
+};
+const fakeExtrasMenu = {
+	funct() {}
+};
+const fakeUi = {
+	actions: fakeActions,
+	menus: {
+		get(name) {
+			return name === 'extras' ? fakeExtrasMenu : null;
+		},
+		addMenuItems() {}
+	},
+	m365: {
+		isExtAuth: false
+	},
+	oneDrive: {
+		isExtAuth: false
+	}
+};
+
+pluginCalls[0](fakeUi);
+
+if (context.window.oneDriveAuth == null) {
+	throw new Error('MSAL auth plugin did not register the OneDrive bridge callback');
+}
+
+if (fakeUi.m365?.isExtAuth !== true) {
+	throw new Error('MSAL auth plugin did not switch Microsoft 365 storage to external auth mode');
+}
+
+if (fakeUi.oneDrive != null) {
+	throw new Error('MSAL auth plugin did not remove personal OneDrive from the UI');
+}
+
+if (!fakeActions.added.some((entry) => entry.name === 'biomedCompanyLogin...') ||
+	!fakeActions.added.some((entry) => entry.name === 'biomedCompanyLogout')) {
+	throw new Error('MSAL auth plugin did not register the expected company sign-in actions');
+}
+
+let bridgeResult = null;
+await new Promise((resolve, reject) =>
+{
+	context.window.oneDriveAuth((result) =>
+	{
+		bridgeResult = result;
+		resolve();
+	}, reject);
+});
+
+if (bridgeResult?.access_token !== 'silent-token' || bridgeResult?.token_type !== 'Bearer') {
+	throw new Error('MSAL auth plugin did not translate Graph tokens into draw.io OneDrive auth payloads');
 }
 
 console.log('MSAL auth configuration validation passed');

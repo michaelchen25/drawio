@@ -50,8 +50,27 @@ if (projectConfig?.authPluginPath !== 'custom-config/auth-msal.js') {
 	throw new Error('Custom app config did not expose the expected auth plugin path');
 }
 
+if (projectConfig?.entraClientId !== '70d8b9a4-3050-4f09-9f6c-23edb16595b6' ||
+	projectConfig?.entraTenantId !== 'a0485c91-c913-4c24-853d-30728fcb5843') {
+	throw new Error('Custom app config did not expose the expected Entra identifiers');
+}
+
+if (projectConfig?.oneDriveConfig?.enablePersonalOneDrive !== false ||
+	projectConfig?.oneDriveConfig?.enableMicrosoft365 !== true) {
+	throw new Error('Custom app config did not expose the expected OneDrive for Business settings');
+}
+
 if (appConfigContext.urlParams.p !== 'custom-config/auth-msal.js') {
 	throw new Error('Custom app config did not register the auth plugin in urlParams.p');
+}
+
+if (appConfigContext.urlParams.od !== '0' || appConfigContext.urlParams.ms365 !== '1') {
+	throw new Error('Custom app config did not force the expected Microsoft 365 storage mode');
+}
+
+if (appConfigContext.window.DRAWIO_MSGRAPH_CLIENT_ID !== '70d8b9a4-3050-4f09-9f6c-23edb16595b6' ||
+	appConfigContext.window.DRAWIO_MSGRAPH_TENANT_ID !== 'a0485c91-c913-4c24-853d-30728fcb5843') {
+	throw new Error('Custom app config did not publish the expected Microsoft Graph app identifiers');
 }
 
 if (!Array.isArray(projectConfig.customLibraries)) {

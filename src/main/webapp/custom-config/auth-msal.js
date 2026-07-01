@@ -242,6 +242,68 @@
 		}
 	}
 
+	function getExpiresInSeconds(result)
+	{
+		if (result == null)
+		{
+			return 3600;
+		}
+
+		if (typeof result.expiresIn === 'number' && result.expiresIn > 0)
+		{
+			return result.expiresIn;
+		}
+
+		if (result.expiresOn instanceof Date)
+		{
+			return Math.max(60, Math.round((result.expiresOn.getTime() - Date.now()) / 1000));
+		}
+
+		return 3600;
+	}
+
+	function toOneDriveAuthInfo(result)
+	{
+		return {
+			access_token: result.accessToken,
+			token_type: result.tokenType || 'Bearer',
+			expires_in: getExpiresInSeconds(result),
+			scope: Array.isArray(result.scopes) ? result.scopes.join(' ') : graphScopes.join(' ')
+		};
+	}
+
+	function bridgeOneDriveAuth(success, error)
+	{
+		acquireGraphToken().then(function(result)
+		{
+			success(toOneDriveAuthInfo(result));
+		}).catch(function(err)
+		{
+			if (typeof error === 'function')
+			{
+				error(err);
+			}
+		});
+	}
+
+	function configureStorageUi(ui)
+	{
+		if (ui == null)
+		{
+			return;
+		}
+
+		if (ui.m365 != null)
+		{
+			ui.m365.isExtAuth = true;
+		}
+
+		if (ui.oneDrive != null)
+		{
+			ui.oneDrive = null;
+		}
+	}
+
 	function formatUiError(err)
 	{
 		if (err == null)
@@ -280,6 +342,9 @@
 		{
 			return;
 		}
+
+		root.oneDriveAuth = bridgeOneDriveAuth;
+		configureStorageUi(ui);
 
 		mxResources.parse(
 			'biomedCompanyLogin=Company Sign In...' +
@@ -326,6 +391,8 @@
 		isSupportedOrigin: isSupportedOrigin,
 		isCompanyAccount: isCompanyAccount,
 		getAccount: getAccount,
+		bridgeOneDriveAuth: bridgeOneDriveAuth,
+		configureStorageUi: configureStorageUi,
 		bootstrap: bootstrap,
 		login: login,
 		logout: logout,
