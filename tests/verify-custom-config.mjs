@@ -6,6 +6,7 @@ const repoRoot = resolve(new URL('..', import.meta.url).pathname);
 const preConfigPath = join(repoRoot, 'src/main/webapp/js/PreConfig.js');
 const appConfigPath = join(repoRoot, 'src/main/webapp/custom-config/app-config.js');
 const isoLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/iso5807.xml');
+const qualitySystemLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/quality-system.xml');
 
 const mxscriptCalls = [];
 const preConfigContext = createContext({
@@ -55,12 +56,24 @@ if (!drawioConfig?.defaultLibraries?.split(';').includes('iso5807')) {
   throw new Error('Custom app config did not enable the ISO 5807 custom library by default');
 }
 
+if (!drawioConfig?.defaultLibraries?.split(';').includes('quality-system')) {
+  throw new Error('Custom app config did not enable the Quality System custom library by default');
+}
+
 const isoSection = drawioConfig?.libraries?.find((section) => section?.id === 'iso5807');
 const isoEntry = isoSection?.entries?.find((entry) => entry?.id === 'iso5807');
 const isoLib = isoEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/iso5807.xml');
 
 if (isoLib?.preload !== true || isoLib?.title?.main !== 'ISO 5807 Basic Symbols') {
   throw new Error('Custom app config did not register the expected ISO 5807 library entry');
+}
+
+const qualitySystemSection = drawioConfig?.libraries?.find((section) => section?.id === 'quality-system');
+const qualitySystemEntry = qualitySystemSection?.entries?.find((entry) => entry?.id === 'quality-system');
+const qualitySystemLib = qualitySystemEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/quality-system.xml');
+
+if (qualitySystemLib?.preload !== true || qualitySystemLib?.title?.main !== 'Quality System') {
+  throw new Error('Custom app config did not register the expected Quality System library entry');
 }
 
 const isoLibraryXml = await readFile(isoLibraryPath, 'utf8');
@@ -78,6 +91,19 @@ if (libraryEntries.length !== 19 || libraryEntries[0].id !== 'terminator') {
 
 if (!libraryEntries.every((entry) => entry.xml.includes('<mxGraphModel>') && entry.title)) {
   throw new Error('ISO 5807 custom library entries must include draw.io cell XML and tooltip titles');
+}
+
+const qualitySystemLibraryXml = await readFile(qualitySystemLibraryPath, 'utf8');
+const qualitySystemLibraryJson = qualitySystemLibraryXml.match(/<mxlibrary><!\[CDATA\[([\s\S]*)\]\]><\/mxlibrary>/)?.[1];
+
+if (qualitySystemLibraryJson == null) {
+  throw new Error('Quality System custom library is not wrapped in an mxlibrary CDATA block');
+}
+
+const qualitySystemLibraryEntries = JSON.parse(qualitySystemLibraryJson);
+
+if (qualitySystemLibraryEntries.length !== 10 || qualitySystemLibraryEntries[0].id !== 'change-control-impact') {
+  throw new Error('Quality System custom library does not contain the expected 10 shape entries');
 }
 
 console.log('Custom configuration entry point test passed');

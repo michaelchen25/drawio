@@ -3,7 +3,7 @@
 	'use strict';
 
 	var root = window;
-	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807';
+	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system';
 	var customLibraries = [
 		{
 			id: 'iso5807',
@@ -22,6 +22,29 @@
 								main: 'ISO 5807 Basic Symbols'
 							},
 							url: 'custom-libraries/iso5807.xml',
+							preload: true
+						}
+					]
+				}
+			]
+		},
+		{
+			id: 'quality-system',
+			title: {
+				main: 'Quality System'
+			},
+			entries: [
+				{
+					id: 'quality-system',
+					title: {
+						main: 'Quality System'
+					},
+					libs: [
+						{
+							title: {
+								main: 'Quality System'
+							},
+							url: 'custom-libraries/quality-system.xml',
 							preload: true
 						}
 					]

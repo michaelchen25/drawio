@@ -95,3 +95,13 @@ This file records every project-specific change made on top of the upstream
   `docs/deployment-cloudflare-pages.md`.
 - Updated deployment smoke-test wiring to use `BIOMED_PAGES_URL`.
 - No Cloudflare project, DNS record, token, or paid service was created.
+
+### T-114: Quality System library
+
+- Added `src/main/webapp/custom-libraries/quality-system.xml` with 10
+  quality-system preset components using existing ISO 5807 shapes only.
+- Updated `src/main/webapp/custom-config/app-config.js` so the Quality System
+  library appears in the sidebar by default.
+- Added automated validation for Quality System entry count, labels, tooltip
+  coverage, ISO shape mapping, draw.io XML payloads, and the no-explicit-color
+  requirement.
