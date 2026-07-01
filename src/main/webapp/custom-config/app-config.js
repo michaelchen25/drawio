@@ -3,7 +3,7 @@
 	'use strict';
 
 	var root = window;
-	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system;lab-templates;antibody-process';
+	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system;lab-templates;antibody-process;cart-process';
 	var customLibraries = [
 		{
 			id: 'iso5807',
@@ -91,6 +91,29 @@
 								main: 'Antibody Process'
 							},
 							url: 'custom-libraries/antibody-process.xml',
+							preload: true
+						}
+					]
+				}
+			]
+		},
+		{
+			id: 'cart-process',
+			title: {
+				main: 'CAR-T Process'
+			},
+			entries: [
+				{
+					id: 'cart-process',
+					title: {
+						main: 'CAR-T Process'
+					},
+					libs: [
+						{
+							title: {
+								main: 'CAR-T Process'
+							},
+							url: 'custom-libraries/cart-process.xml',
 							preload: true
 						}
 					]

@@ -9,6 +9,7 @@ const isoLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/iso5807.
 const qualitySystemLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/quality-system.xml');
 const labTemplatesLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/lab-templates.xml');
 const antibodyProcessLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/antibody-process.xml');
+const cartProcessLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/cart-process.xml');
 
 const mxscriptCalls = [];
 const preConfigContext = createContext({
@@ -70,6 +71,10 @@ if (!drawioConfig?.defaultLibraries?.split(';').includes('antibody-process')) {
   throw new Error('Custom app config did not enable the Antibody Process custom library by default');
 }
 
+if (!drawioConfig?.defaultLibraries?.split(';').includes('cart-process')) {
+  throw new Error('Custom app config did not enable the CAR-T Process custom library by default');
+}
+
 const isoSection = drawioConfig?.libraries?.find((section) => section?.id === 'iso5807');
 const isoEntry = isoSection?.entries?.find((entry) => entry?.id === 'iso5807');
 const isoLib = isoEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/iso5807.xml');
@@ -100,6 +105,14 @@ const antibodyProcessLib = antibodyProcessEntry?.libs?.find((lib) => lib?.url ==
 
 if (antibodyProcessLib?.preload !== true || antibodyProcessLib?.title?.main !== 'Antibody Process') {
   throw new Error('Custom app config did not register the expected Antibody Process library entry');
+}
+
+const cartProcessSection = drawioConfig?.libraries?.find((section) => section?.id === 'cart-process');
+const cartProcessEntry = cartProcessSection?.entries?.find((entry) => entry?.id === 'cart-process');
+const cartProcessLib = cartProcessEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/cart-process.xml');
+
+if (cartProcessLib?.preload !== true || cartProcessLib?.title?.main !== 'CAR-T Process') {
+  throw new Error('Custom app config did not register the expected CAR-T Process library entry');
 }
 
 const isoLibraryXml = await readFile(isoLibraryPath, 'utf8');
@@ -156,6 +169,19 @@ const antibodyProcessLibraryEntries = JSON.parse(antibodyProcessLibraryJson);
 
 if (antibodyProcessLibraryEntries.length !== 15 || antibodyProcessLibraryEntries[0].id !== 'cell-line-development') {
   throw new Error('Antibody Process custom library does not contain the expected 15 entries');
+}
+
+const cartProcessLibraryXml = await readFile(cartProcessLibraryPath, 'utf8');
+const cartProcessLibraryJson = cartProcessLibraryXml.match(/<mxlibrary><!\[CDATA\[([\s\S]*)\]\]><\/mxlibrary>/)?.[1];
+
+if (cartProcessLibraryJson == null) {
+  throw new Error('CAR-T Process custom library is not wrapped in an mxlibrary CDATA block');
+}
+
+const cartProcessLibraryEntries = JSON.parse(cartProcessLibraryJson);
+
+if (cartProcessLibraryEntries.length !== 13 || cartProcessLibraryEntries[0].id !== 'leukapheresis') {
+  throw new Error('CAR-T Process custom library does not contain the expected 13 entries');
 }
 
 console.log('Custom configuration entry point test passed');

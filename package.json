@@ -6,13 +6,14 @@
   "type": "module",
   "scripts": {
     "build": "npm test",
-    "test": "node tests/verify-static-app.mjs && node tests/verify-custom-config.mjs && node tests/verify-iso5807-library.mjs && node tests/verify-tooltip-review.mjs && node tests/verify-quality-system-library.mjs && node tests/verify-lab-templates-library.mjs && node tests/verify-antibody-process-library.mjs && node tests/verify-github-actions.mjs && node tests/verify-cloudflare-pages-config.mjs",
+    "test": "node tests/verify-static-app.mjs && node tests/verify-custom-config.mjs && node tests/verify-iso5807-library.mjs && node tests/verify-tooltip-review.mjs && node tests/verify-quality-system-library.mjs && node tests/verify-lab-templates-library.mjs && node tests/verify-antibody-process-library.mjs && node tests/verify-cart-process-library.mjs && node tests/verify-github-actions.mjs && node tests/verify-cloudflare-pages-config.mjs",
     "test:custom-config": "node tests/verify-custom-config.mjs",
     "test:deployed": "node tests/verify-deployed-static-app.mjs",
     "test:github-actions": "node tests/verify-github-actions.mjs",
     "test:iso5807-library": "node tests/verify-iso5807-library.mjs",
     "test:lab-templates-library": "node tests/verify-lab-templates-library.mjs",
     "test:antibody-process-library": "node tests/verify-antibody-process-library.mjs",
+    "test:cart-process-library": "node tests/verify-cart-process-library.mjs",
     "test:quality-system-library": "node tests/verify-quality-system-library.mjs",
     "test:tooltip-review": "node tests/verify-tooltip-review.mjs",
     "test:cloudflare-pages-config": "node tests/verify-cloudflare-pages-config.mjs"

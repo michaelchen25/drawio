@@ -124,3 +124,12 @@ This file records every project-specific change made on top of the upstream
   Process library appears in the sidebar by default.
 - Added automated validation for entry count, tooltip coverage, labels, ISO
   shape mapping, draw.io XML payloads, and the no-explicit-color requirement.
+
+### T-117: CAR-T Process library
+
+- Added `src/main/webapp/custom-libraries/cart-process.xml` with 13 CAR-T
+  process preset components from `SHAPE-GUIDE-biomed.md`.
+- Updated `src/main/webapp/custom-config/app-config.js` so the CAR-T Process
+  library appears in the sidebar by default.
+- Added automated validation for entry count, tooltip coverage, labels, ISO
+  shape mapping, draw.io XML payloads, and the no-explicit-color requirement.
