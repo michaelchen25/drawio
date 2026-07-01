@@ -48,6 +48,25 @@ This file records every project-specific change made on top of the upstream
 - No Cloudflare project, DNS record, token, or paid service configuration was
   performed.
 
+### T-104 follow-up: Cloudflare Pages redirects warning
+
+- Removed the catch-all `/index.html` rewrite from
+  `src/main/webapp/_redirects` because Cloudflare Pages reports it as an
+  infinite-loop redirect.
+- Updated the Cloudflare Pages config validation test to reject that catch-all
+  rewrite.
+
+### T-110: Custom library loading mechanism
+
+- Updated `src/main/webapp/custom-config/app-config.js` to register custom
+  sidebar libraries through draw.io's existing `DRAWIO_CONFIG.libraries`
+  mechanism.
+- Added `src/main/webapp/custom-libraries/test-library.xml` as a minimal
+  black-and-white test library for validating the loading path before adding
+  production ISO 5807 and biomed libraries.
+- Extended the custom config test to verify the sidebar library section,
+  library URL, preload flag, and test library XML payload.
+
 ### Deployment pivot: Cloudflare Pages
 
 - Replaced `.github/workflows/azure-static-web-apps.yml` with
