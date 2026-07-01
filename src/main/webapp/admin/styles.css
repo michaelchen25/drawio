@@ -1,0 +1,176 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6f8;
+  color: #111111;
+}
+
+.page-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.page-header {
+  background: #ffffff;
+  border-bottom: 1px solid #d7dbe0;
+}
+
+.page-header .page-shell {
+  padding-top: 28px;
+  padding-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #4c5560;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 32px;
+  line-height: 1.15;
+}
+
+.lede {
+  margin-top: 10px;
+  max-width: 760px;
+  color: #48515b;
+  line-height: 1.5;
+}
+
+.page-main {
+  padding-top: 24px;
+  padding-bottom: 40px;
+}
+
+.section-band {
+  background: #ffffff;
+  border: 1px solid #d7dbe0;
+  margin-bottom: 18px;
+}
+
+.section-heading {
+  padding: 20px 20px 14px;
+  border-bottom: 1px solid #e3e7eb;
+}
+
+.section-heading h2 {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.section-heading p {
+  margin-top: 8px;
+  color: #4f5862;
+  line-height: 1.5;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  padding: 20px;
+}
+
+.metric-tile {
+  min-height: 108px;
+  border: 1px solid #d7dbe0;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fafbfc;
+}
+
+.metric-label {
+  display: block;
+  font-size: 13px;
+  color: #58616b;
+}
+
+.metric-value {
+  display: block;
+  margin-top: 10px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.metric-note {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #58616b;
+  line-height: 1.4;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.data-table th,
+.data-table td {
+  padding: 14px 20px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid #e3e7eb;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.data-table thead th {
+  font-size: 13px;
+  color: #58616b;
+  background: #fafbfc;
+}
+
+.status-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border: 1px solid #9da7b1;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+@media (max-width: 720px) {
+  .page-shell {
+    padding: 0 16px;
+  }
+
+  .page-header .page-shell,
+  .page-main {
+    padding-top: 20px;
+    padding-bottom: 28px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .section-heading,
+  .metric-grid {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}

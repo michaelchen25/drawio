@@ -183,3 +183,17 @@ This file records every project-specific change made on top of the upstream
   the export dialog links to for the manual SVG-to-PowerPoint workflow.
 - Added automated validation for plugin registration, export-dialog hint
   injection, and help-page coverage.
+
+### T-140: Admin dashboard
+
+- Added `src/main/webapp/admin/` as a standalone static admin surface instead
+  of embedding a second editor experience.
+- Added a project-owned admin data registry that lists current library versions,
+  preset counts, operational usage tracking references, and view-only Entra
+  group mappings for the MVP.
+- Added client-side rendering for the admin page with a restrained operational
+  layout that stays within the project scope and does not introduce new backend
+  services.
+- Added automated validation that checks the admin page structure, the rendered
+  row counts, and consistency with the currently loaded library registry and
+  tooltip review status.

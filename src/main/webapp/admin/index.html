@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Biomed Flowchart Admin</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="page-header">
+      <div class="page-shell">
+        <p class="eyebrow">Biomed Flowchart Editor</p>
+        <h1>Admin Dashboard</h1>
+        <p class="lede">
+          Library registry, operational usage summary, and Entra group mapping
+          reference for the MVP deployment.
+        </p>
+      </div>
+    </header>
+
+    <main class="page-shell page-main">
+      <section class="section-band">
+        <div class="section-heading">
+          <h2>Operational Snapshot</h2>
+          <p>Current project-owned configuration and adoption tracking posture.</p>
+        </div>
+        <div id="snapshotGrid" class="metric-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="section-band">
+        <div class="section-heading">
+          <h2>Library Registry</h2>
+          <p>Loaded custom libraries, current registry version, and review status.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Library</th>
+                <th>Version</th>
+                <th>Presets</th>
+                <th>Tooltip Status</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody id="libraryTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section-band">
+        <div class="section-heading">
+          <h2>Usage Tracking</h2>
+          <p>
+            MVP keeps this view lightweight. Adoption metrics are operational
+            references until telemetry approval is available.
+          </p>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Current Value</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody id="usageTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section-band">
+        <div class="section-heading">
+          <h2>Entra Group Mapping</h2>
+          <p>
+            View-only registry for the MVP. Sign-in is currently enforced by
+            single-tenant Entra configuration, not by page-side group rules.
+          </p>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Group / Scope</th>
+                <th>Mapped Access</th>
+                <th>Status</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="groupTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
