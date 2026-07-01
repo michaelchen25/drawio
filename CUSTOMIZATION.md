@@ -82,6 +82,8 @@ This file records every project-specific change made on top of the upstream
 - Added `docs/tooltip-review-biomed.md` as the domain-review checklist for
   biomed tooltip drafts, with automated coverage validation to prevent missing
   review rows.
+- Marked the biomed tooltip set ready for MVP use after project owner review
+  on 2026-07-01; future wording refinements can remain content-only updates.
 
 ### Deployment pivot: Cloudflare Pages
 

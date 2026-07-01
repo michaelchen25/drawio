@@ -42,8 +42,8 @@ if (tooltipData.metadata?.reviewStatus?.iso5807 !== 'ready') {
   throw new Error('ISO 5807 tooltip data must be marked ready');
 }
 
-if (tooltipData.metadata?.reviewStatus?.biomed !== 'draft-needs-domain-review') {
-  throw new Error('Biomed tooltip data must stay marked as draft until domain review');
+if (tooltipData.metadata?.reviewStatus?.biomed !== 'ready') {
+  throw new Error('Biomed tooltip data must be marked ready after domain review');
 }
 
 if (entries.length !== expectedIds.length) {

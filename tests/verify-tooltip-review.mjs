@@ -8,12 +8,16 @@ const reviewPath = join(repoRoot, 'docs/tooltip-review-biomed.md');
 const tooltipData = JSON.parse(await readFile(tooltipPath, 'utf8'));
 const reviewDoc = await readFile(reviewPath, 'utf8');
 
-if (tooltipData.metadata?.reviewStatus?.biomed !== 'draft-needs-domain-review') {
-  throw new Error('Biomed tooltips must remain marked draft until domain review is complete');
+if (tooltipData.metadata?.reviewStatus?.biomed !== 'ready') {
+  throw new Error('Biomed tooltips must be marked ready after project owner review');
 }
 
-if (!reviewDoc.includes('draft-needs-domain-review')) {
-  throw new Error('Biomed tooltip review document must show the draft review status');
+if (!reviewDoc.includes('| Biomed tooltips | ready |')) {
+  throw new Error('Biomed tooltip review document must show the ready review status');
+}
+
+if (!reviewDoc.includes('Project owner note: wording is acceptable for MVP use.')) {
+  throw new Error('Biomed tooltip review document must record project owner approval');
 }
 
 for (const section of ['qualitySystem', 'labTemplates', 'antibodyProcess', 'cartProcess']) {

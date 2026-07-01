@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file is the domain-review checklist for `T-112`. The ISO 5807 tooltip set is already marked ready in `src/main/webapp/custom-libraries/tooltips.json`; the biomed sections below remain draft until reviewed by the project owner or a domain expert.
+This file is the domain-review checklist for `T-112`. The ISO 5807 tooltip set is already marked ready in `src/main/webapp/custom-libraries/tooltips.json`; the biomed sections were reviewed by the project owner and marked ready on 2026-07-01.
 
 Review action:
 - Put `OK` in the Review column when the tooltip is acceptable.
@@ -14,7 +14,9 @@ Review action:
 | Area | Status |
 |---|---|
 | ISO 5807 | ready |
-| Biomed tooltips | draft-needs-domain-review |
+| Biomed tooltips | ready |
+
+Project owner note: wording is acceptable for MVP use. Future domain wording refinements may be handled as follow-up content edits.
 
 ## Quality System
 

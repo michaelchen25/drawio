@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "reviewStatus": {
       "iso5807": "ready",
-      "biomed": "draft-needs-domain-review"
+      "biomed": "ready"
     }
   },
   "iso5807": {
