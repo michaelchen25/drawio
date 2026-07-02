@@ -7,6 +7,78 @@ const authPath = join(repoRoot, 'src/main/webapp/custom-config/auth-msal.js');
 const tenantId = 'a0485c91-c913-4c24-853d-30728fcb5843';
 const clientId = '70d8b9a4-3050-4f09-9f6c-23edb16595b6';
 
+function createFakeDocument()
+{
+	const elementsById = new Map();
+	const listeners = new Map();
+
+	function createElement(tagName)
+	{
+		const element = {
+			tagName: String(tagName || '').toUpperCase(),
+			style: {},
+			children: [],
+			attributes: {},
+			textContent: '',
+			innerText: '',
+			innerHTML: '',
+			parentNode: null,
+			disabled: false,
+			appendChild(child) {
+				child.parentNode = this;
+				this.children.push(child);
+
+				if (child.id) {
+					elementsById.set(child.id, child);
+				}
+
+				if (this.tagName === 'HEAD' && child.tagName === 'SCRIPT' && typeof child.onload === 'function') {
+					child.onload();
+				}
+
+				return child;
+			},
+			setAttribute(name, value) {
+				this.attributes[name] = String(value);
+
+				if (name === 'id') {
+					this.id = String(value);
+					elementsById.set(this.id, this);
+				}
+			},
+			addEventListener(name, handler) {
+				this.listeners = this.listeners || {};
+				this.listeners[name] = handler;
+			},
+			removeEventListener(name) {
+				if (this.listeners != null) {
+					delete this.listeners[name];
+				}
+			}
+		};
+
+		return element;
+	}
+
+	const document = {
+		readyState: 'complete',
+		head: createElement('head'),
+		body: createElement('body'),
+		createElement,
+		getElementById(id) {
+			return elementsById.get(id) || null;
+		},
+		addEventListener(name, handler) {
+			listeners.set(name, handler);
+		},
+		removeEventListener(name) {
+			listeners.delete(name);
+		}
+	};
+
+	return document;
+}
+
 function createMsalStub(options = {})
 {
 	let activeAccount = options.activeAccount || null;
@@ -100,6 +172,7 @@ async function loadAuthContext(options = {})
 	const pluginCalls = [];
 	const msal = createMsalStub(options.msalOptions);
 	const mxResourcesCalls = [];
+	const document = createFakeDocument();
 	const context = createContext({
 		window: {
 			location: {
@@ -109,11 +182,13 @@ async function loadAuthContext(options = {})
 				loadPlugin: (callback) => pluginCalls.push(callback)
 			},
 			msal,
+			document,
 			console
 		},
 		Draw: {
 			loadPlugin: (callback) => pluginCalls.push(callback)
 		},
+		document,
 		mxResources: {
 			parse: (value) => mxResourcesCalls.push(value)
 		},
@@ -122,10 +197,10 @@ async function loadAuthContext(options = {})
 
 	new Script(await readFile(authPath, 'utf8'), {filename: authPath}).runInContext(context);
 
-	return {context, pluginCalls, msal, mxResourcesCalls};
+	return {context, pluginCalls, msal, mxResourcesCalls, document};
 }
 
-const {context, pluginCalls, msal} = await loadAuthContext();
+const {context, pluginCalls, msal, document} = await loadAuthContext();
 const auth = context.window.BIOMED_FLOWCHART_EDITOR?.entraAuth;
 
 if (context.window.BIOMED_ENTRA_AUTH_LOADED !== true) {
@@ -144,6 +219,10 @@ if (typeof auth?.bridgeOneDriveAuth !== 'function' || typeof auth?.configureStor
 	throw new Error('MSAL auth config did not expose the expected OneDrive bridge helpers');
 }
 
+if (auth?.msalBrowserUrl !== 'https://alcdn.msauth.net/browser/3.7.1/js/msal-browser.min.js') {
+	throw new Error('MSAL auth config did not expose the expected browser bundle URL');
+}
+
 if (!auth.redirectUris.includes('https://drawio-a7q.pages.dev') ||
 	!auth.redirectUris.includes('http://localhost:8080')) {
 	throw new Error('MSAL auth config is missing the expected redirect URIs');
@@ -160,6 +239,17 @@ if (!auth.isSupportedOrigin('https://drawio-a7q.pages.dev') ||
 	throw new Error('MSAL auth origin checks are incorrect');
 }
 
+if (document.getElementById('biomed-auth-gate') == null ||
+	document.getElementById('biomed-auth-login') == null) {
+	throw new Error('MSAL auth config did not mount the expected access gate');
+}
+
+await auth.refreshGate();
+
+if (document.getElementById('biomed-auth-gate')?.style?.display === 'none') {
+	throw new Error('MSAL auth gate should stay visible when no session exists');
+}
+
 await auth.login();
 
 if (msal.constructedConfigs.length !== 1) {
@@ -172,6 +262,22 @@ if (msal.constructedConfigs[0]?.auth?.authority !== 'https://login.microsoftonli
 
 if (msal.loginCalls.length !== 1 || !msal.loginCalls[0].scopes.includes('Files.ReadWrite')) {
 	throw new Error('MSAL auth login did not request the expected Graph scopes');
+}
+
+const signedIn = await loadAuthContext({
+	msalOptions: {
+		activeAccount: {
+			username: 'user@cytoarm.com',
+			tenantId,
+			homeAccountId: 'abc.' + tenantId
+		}
+	}
+});
+
+await signedIn.context.window.BIOMED_FLOWCHART_EDITOR.entraAuth.refreshGate();
+
+if (signedIn.document.getElementById('biomed-auth-gate')?.style?.display !== 'none') {
+	throw new Error('MSAL auth gate did not unlock the editor for an approved company account');
 }
 
 const silentResult = await auth.acquireGraphToken();
@@ -241,14 +347,11 @@ const fakeActions = {
 		this.added.push({name, handler});
 	}
 };
-const fakeExtrasMenu = {
-	funct() {}
-};
 const fakeUi = {
 	actions: fakeActions,
 	menus: {
-		get(name) {
-			return name === 'extras' ? fakeExtrasMenu : null;
+		get() {
+			return null;
 		},
 		addMenuItems() {}
 	},
@@ -274,9 +377,8 @@ if (fakeUi.oneDrive != null) {
 	throw new Error('MSAL auth plugin did not remove personal OneDrive from the UI');
 }
 
-if (!fakeActions.added.some((entry) => entry.name === 'biomedCompanyLogin...') ||
-	!fakeActions.added.some((entry) => entry.name === 'biomedCompanyLogout')) {
-	throw new Error('MSAL auth plugin did not register the expected company sign-in actions');
+if (fakeActions.added.length !== 0) {
+	throw new Error('MSAL auth plugin should no longer depend on Extras menu actions for access control');
 }
 
 let bridgeResult = null;

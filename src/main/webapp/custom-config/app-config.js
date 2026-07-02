@@ -7,6 +7,7 @@
 	var exportHintPluginPath = 'custom-config/export-pptx-hint.js';
 	var entraClientId = '70d8b9a4-3050-4f09-9f6c-23edb16595b6';
 	var entraTenantId = 'a0485c91-c913-4c24-853d-30728fcb5843';
+	var msalBrowserUrl = 'https://alcdn.msauth.net/browser/3.7.1/js/msal-browser.min.js';
 	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system;lab-templates;antibody-process;cart-process';
 	var customLibraries = [
 		{
@@ -134,6 +135,7 @@
 		exportHintPluginPath: exportHintPluginPath,
 		entraClientId: entraClientId,
 		entraTenantId: entraTenantId,
+		msalBrowserUrl: msalBrowserUrl,
 		oneDriveConfig: {
 			enablePersonalOneDrive: false,
 			enableMicrosoft365: true
@@ -142,6 +144,11 @@
 
 	root.DRAWIO_MSGRAPH_CLIENT_ID = entraClientId;
 	root.DRAWIO_MSGRAPH_TENANT_ID = entraTenantId;
+
+	if (typeof mxscript === 'function')
+	{
+		mxscript(authPluginPath);
+	}
 
 	if (typeof urlParams === 'object' && urlParams != null)
 	{

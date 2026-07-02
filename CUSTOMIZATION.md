@@ -142,6 +142,12 @@ This file records every project-specific change made on top of the upstream
   single-tenant Entra ID auth module.
 - Updated `src/main/webapp/custom-config/app-config.js` to register the auth
   module as a draw.io plugin without touching editor core files.
+- Updated `src/main/webapp/custom-config/app-config.js` to preload the auth
+  module from the existing custom-config entry point so the company-access gate
+  appears before the editor can be used.
+- Updated `src/main/webapp/custom-config/auth-msal.js` to render a mandatory
+  full-screen company sign-in gate and to auto-load the MSAL browser bundle
+  before unlocking the editor for approved company accounts.
 - Added automated validation for tenant/client IDs, redirect URIs, Graph
   scopes, supported-origin checks, and non-company-account rejection behavior.
 

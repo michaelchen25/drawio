@@ -4,6 +4,12 @@
 
 	var root = window;
 	var project = root.BIOMED_FLOWCHART_EDITOR = root.BIOMED_FLOWCHART_EDITOR || {};
+
+	if (root.BIOMED_ENTRA_AUTH_LOADED === true && project.entraAuth != null)
+	{
+		return;
+	}
+
 	var tenantId = 'a0485c91-c913-4c24-853d-30728fcb5843';
 	var clientId = '70d8b9a4-3050-4f09-9f6c-23edb16595b6';
 	var redirectUris = [
@@ -13,6 +19,13 @@
 	var graphScopes = ['User.Read', 'Files.ReadWrite'];
 	var loginScopes = ['openid', 'profile', 'email', 'offline_access'].concat(graphScopes);
 	var pluginId = 'custom-config/auth-msal.js';
+	var msalBrowserUrl = project.msalBrowserUrl || 'https://alcdn.msauth.net/browser/3.7.1/js/msal-browser.min.js';
+	var gateRootId = 'biomed-auth-gate';
+	var gateStatusId = 'biomed-auth-status';
+	var gateButtonId = 'biomed-auth-login';
+	var gateTitleId = 'biomed-auth-title';
+	var gateDetailId = 'biomed-auth-detail';
+	var gateFooterId = 'biomed-auth-footer';
 
 	function createError(code, title, message, detail)
 	{
@@ -49,8 +62,147 @@
 			'unsupported_origin',
 			'Unsupported Sign-In Origin',
 			'This origin is not registered for Entra ID sign-in.',
-			'Register the current origin in the Entra SPA redirect URI list before using company sign-in.'
+			'Register the current origin in the Entra SPA redirect URI list before using company access.'
 		);
+	}
+
+	function getDocument()
+	{
+		return root.document || null;
+	}
+
+	function whenDomReady(callback)
+	{
+		var doc = getDocument();
+
+		if (doc == null)
+		{
+			callback();
+			return;
+		}
+
+		if (doc.readyState === 'interactive' || doc.readyState === 'complete')
+		{
+			callback();
+			return;
+		}
+
+		if (typeof doc.addEventListener === 'function')
+		{
+			doc.addEventListener('DOMContentLoaded', callback, {once: true});
+		}
+		else
+		{
+			callback();
+		}
+	}
+
+	function setElementText(element, value)
+	{
+		if (element == null)
+		{
+			return;
+		}
+
+		element.textContent = value;
+		element.innerText = value;
+	}
+
+	function getGateElement(id)
+	{
+		var doc = getDocument();
+
+		return (doc != null && typeof doc.getElementById === 'function') ? doc.getElementById(id) : null;
+	}
+
+	function ensureMsalScript()
+	{
+		if (root.msal != null && typeof root.msal.PublicClientApplication === 'function')
+		{
+			return Promise.resolve(root.msal);
+		}
+
+		if (project.entraAuthMsalPromise != null)
+		{
+			return project.entraAuthMsalPromise;
+		}
+
+		project.entraAuthMsalPromise = new Promise(function(resolve, reject)
+		{
+			var doc = getDocument();
+
+			if (doc == null || doc.head == null || typeof doc.createElement !== 'function')
+			{
+				reject(createError(
+					'msal_not_loaded',
+					'Sign-In Library Missing',
+					'Microsoft Authentication Library is not available on this page.',
+					'Check that the MSAL browser bundle is loaded before attempting company sign-in.'
+				));
+				return;
+			}
+
+			var existing = getGateElement('biomed-auth-msal-script');
+
+			if (existing != null)
+			{
+				if (root.msal != null && typeof root.msal.PublicClientApplication === 'function')
+				{
+					resolve(root.msal);
+				}
+				else
+				{
+					existing.addEventListener('load', function()
+					{
+						resolve(root.msal);
+					}, {once: true});
+					existing.addEventListener('error', function()
+					{
+						reject(createError(
+							'msal_script_failed',
+							'Sign-In Library Failed',
+							'Unable to load the Microsoft Authentication Library.',
+							'Check network access to the configured MSAL browser bundle.'
+						));
+					}, {once: true});
+				}
+
+				return;
+			}
+
+			var script = doc.createElement('script');
+			script.id = 'biomed-auth-msal-script';
+			script.async = true;
+			script.src = msalBrowserUrl;
+			script.onload = function()
+			{
+				if (root.msal != null && typeof root.msal.PublicClientApplication === 'function')
+				{
+					resolve(root.msal);
+				}
+				else
+				{
+					reject(createError(
+						'msal_not_loaded',
+						'Sign-In Library Missing',
+						'Microsoft Authentication Library loaded without the expected browser entry point.',
+						'Verify that the configured MSAL browser bundle is valid.'
+					));
+				}
+			};
+			script.onerror = function()
+			{
+				reject(createError(
+					'msal_script_failed',
+					'Sign-In Library Failed',
+					'Unable to load the Microsoft Authentication Library.',
+					'Check network access to the configured MSAL browser bundle.'
+				));
+			};
+			doc.head.appendChild(script);
+		});
+
+		return project.entraAuthMsalPromise;
 	}
 
 	function getMsalLibrary()
@@ -160,8 +312,204 @@
 		return account;
 	}
 
+	function updateGate(state)
+	{
+		var gate = getGateElement(gateRootId);
+
+		if (gate == null)
+		{
+			return;
+		}
+
+		var title = getGateElement(gateTitleId);
+		var detail = getGateElement(gateDetailId);
+		var status = getGateElement(gateStatusId);
+		var footer = getGateElement(gateFooterId);
+		var button = getGateElement(gateButtonId);
+
+		if (state == null)
+		{
+			state = {};
+		}
+
+		gate.style.display = state.visible === false ? 'none' : 'flex';
+		gate.setAttribute('aria-hidden', state.visible === false ? 'true' : 'false');
+
+		if (button != null)
+		{
+			button.disabled = state.loading === true;
+			setElementText(button, state.buttonLabel || 'Sign In with Company Account');
+		}
+
+		setElementText(title, state.title || 'Company Access Required');
+		setElementText(detail, state.detail || 'Sign in with your CytoArm Microsoft account before using this editor.');
+		setElementText(status, state.status || '');
+		setElementText(footer, state.footer || 'Only approved company accounts can open, edit, or save diagrams here.');
+	}
+
+	function createGateElement(doc, tagName, id, styles, text)
+	{
+		var element = doc.createElement(tagName);
+
+		if (id != null)
+		{
+			element.id = id;
+		}
+
+		if (styles != null)
+		{
+			element.style.cssText = styles;
+		}
+
+		if (text != null)
+		{
+			setElementText(element, text);
+		}
+
+		return element;
+	}
+
+	function mountAccessGate()
+	{
+		var doc = getDocument();
+
+		if (doc == null || doc.body == null || typeof doc.createElement !== 'function')
+		{
+			return null;
+		}
+
+		var existing = getGateElement(gateRootId);
+
+		if (existing != null)
+		{
+			return existing;
+		}
+
+		var gate = createGateElement(
+			doc,
+			'div',
+			gateRootId,
+			[
+				'position:fixed',
+				'inset:0',
+				'z-index:2147483647',
+				'display:flex',
+				'align-items:center',
+				'justify-content:center',
+				'padding:24px',
+				'background:rgba(248,250,252,0.98)',
+				'font-family:Helvetica,Arial,sans-serif',
+				'color:#111827'
+			].join(';')
+		);
+		var panel = createGateElement(
+			doc,
+			'div',
+			null,
+			[
+				'width:min(440px,100%)',
+				'padding:28px',
+				'border:1px solid #d1d5db',
+				'border-radius:8px',
+				'background:#ffffff',
+				'box-shadow:0 16px 40px rgba(15,23,42,0.12)'
+			].join(';')
+		);
+		var title = createGateElement(
+			doc,
+			'h1',
+			gateTitleId,
+			'margin:0 0 12px 0;font-size:24px;font-weight:700;line-height:1.25',
+			'Company Access Required'
+		);
+		var detail = createGateElement(
+			doc,
+			'p',
+			gateDetailId,
+			'margin:0 0 16px 0;font-size:14px;line-height:1.6;color:#374151',
+			'Sign in with your CytoArm Microsoft account before using this editor.'
+		);
+		var status = createGateElement(
+			doc,
+			'div',
+			gateStatusId,
+			'min-height:22px;margin:0 0 16px 0;font-size:13px;line-height:1.5;color:#1d4ed8',
+			'Checking company session...'
+		);
+		var button = createGateElement(
+			doc,
+			'button',
+			gateButtonId,
+			[
+				'display:inline-flex',
+				'align-items:center',
+				'justify-content:center',
+				'width:100%',
+				'min-height:44px',
+				'padding:10px 16px',
+				'border:1px solid #2563eb',
+				'border-radius:8px',
+				'background:#2563eb',
+				'color:#ffffff',
+				'font-size:14px',
+				'font-weight:600',
+				'cursor:pointer'
+			].join(';'),
+			'Sign In with Company Account'
+		);
+		var footer = createGateElement(
+			doc,
+			'p',
+			gateFooterId,
+			'margin:16px 0 0 0;font-size:12px;line-height:1.5;color:#6b7280',
+			'Only approved company accounts can open, edit, or save diagrams here.'
+		);
+
+		if (typeof button.addEventListener === 'function')
+		{
+			button.addEventListener('click', function()
+			{
+				handleGateLogin();
+			});
+		}
+
+		panel.appendChild(title);
+		panel.appendChild(detail);
+		panel.appendChild(status);
+		panel.appendChild(button);
+		panel.appendChild(footer);
+		gate.appendChild(panel);
+		doc.body.appendChild(gate);
+
+		return gate;
+	}
+
+	function showAccessGate(statusText, detailText)
+	{
+		whenDomReady(function()
+		{
+			mountAccessGate();
+			updateGate({
+				visible: true,
+				title: 'Company Access Required',
+				detail: detailText || 'Sign in with your CytoArm Microsoft account before using this editor.',
+				status: statusText || 'Sign in is required to continue.',
+				buttonLabel: 'Sign In with Company Account'
+			});
+		});
+	}
+
+	function hideAccessGate()
+	{
+		updateGate({
+			visible: false
+		});
+	}
+
 	async function bootstrap()
 	{
+		await ensureMsalScript();
+
 		var client = getClient();
 
 		if (typeof client.handleRedirectPromise === 'function')
@@ -195,6 +543,26 @@
 		};
 	}
 
+	async function ensureCompanySession(options)
+	{
+		options = options || {};
+		await bootstrap();
+
+		var account = getAccount();
+
+		if (account != null)
+		{
+			return ensureCompanyAccount(account);
+		}
+
+		if (options.interactive === true)
+		{
+			return (await login()).account;
+		}
+
+		return null;
+	}
+
 	async function logout()
 	{
 		await bootstrap();
@@ -217,7 +585,7 @@
 
 	async function acquireGraphToken(interactiveFallback)
 	{
-		await bootstrap();
+		await ensureCompanySession({interactive: false});
 
 		var client = getClient();
 		var account = ensureCompanyAccount(getAccount());
@@ -274,7 +642,10 @@
 
 	function bridgeOneDriveAuth(success, error)
 	{
-		acquireGraphToken().then(function(result)
+		ensureCompanySession({interactive: true}).then(function()
+		{
+			return acquireGraphToken();
+		}).then(function(result)
 		{
 			success(toOneDriveAuthInfo(result));
 		}).catch(function(err)
@@ -326,6 +697,14 @@
 		var info = formatUiError(err);
 		var message = info.message + (info.detail != null ? '\n\n' + info.detail : '');
 
+		updateGate({
+			visible: true,
+			title: info.title,
+			detail: info.detail || 'Sign in with your company account to continue.',
+			status: info.message,
+			buttonLabel: 'Try Company Sign-In Again'
+		});
+
 		if (ui != null && typeof ui.alert === 'function')
 		{
 			ui.alert(message, info.title);
@@ -336,49 +715,77 @@
 		}
 	}
 
+	async function refreshGate()
+	{
+		showAccessGate('Checking company session...');
+
+		try
+		{
+			var account = await ensureCompanySession({interactive: false});
+
+			if (account == null)
+			{
+				updateGate({
+					visible: true,
+					title: 'Company Access Required',
+					detail: 'Sign in with your CytoArm Microsoft account before using this editor.',
+					status: 'Sign in is required to continue.',
+					buttonLabel: 'Sign In with Company Account'
+				});
+			}
+			else
+			{
+				hideAccessGate();
+			}
+		}
+		catch (err)
+		{
+			updateGate({
+				visible: true,
+				title: err.title || 'Company Access Required',
+				detail: err.detail || 'Sign in with your CytoArm Microsoft account before using this editor.',
+				status: err.message || 'Company sign-in is required to continue.',
+				buttonLabel: 'Try Company Sign-In Again'
+			});
+		}
+	}
+
+	async function handleGateLogin()
+	{
+		updateGate({
+			visible: true,
+			title: 'Company Access Required',
+			detail: 'Sign in with your CytoArm Microsoft account before using this editor.',
+			status: 'Opening Microsoft sign-in...',
+			buttonLabel: 'Signing In...',
+			loading: true
+		});
+
+		try
+		{
+			await ensureCompanySession({interactive: true});
+			hideAccessGate();
+		}
+		catch (err)
+		{
+			updateGate({
+				visible: true,
+				title: err.title || 'Company Sign-In Failed',
+				detail: err.detail || 'Only company-managed accounts can open this editor.',
+				status: err.message || 'Company sign-in failed.',
+				buttonLabel: 'Try Company Sign-In Again'
+			});
+		}
+	}
+
 	function registerPlugin(ui)
 	{
-		if (ui == null || ui.actions == null || ui.menus == null)
-		{
-			return;
-		}
-
 		root.oneDriveAuth = bridgeOneDriveAuth;
 		configureStorageUi(ui);
-
-		mxResources.parse(
-			'biomedCompanyLogin=Company Sign In...' +
-			';biomedCompanyLogout=Company Sign Out'
-		);
-
-		ui.actions.addAction('biomedCompanyLogin...', function()
+		refreshGate().catch(function(err)
 		{
-			login().catch(function(err)
-			{
-				showUiError(ui, err);
-			});
+			showUiError(ui, err);
 		});
-
-		ui.actions.addAction('biomedCompanyLogout', function()
-		{
-			logout().catch(function(err)
-			{
-				showUiError(ui, err);
-			});
-		});
-
-		var extrasMenu = ui.menus.get('extras');
-
-		if (extrasMenu != null)
-		{
-			var oldFunct = extrasMenu.funct;
-
-			extrasMenu.funct = function(menu, parent)
-			{
-				oldFunct.apply(this, arguments);
-				ui.menus.addMenuItems(menu, ['-', 'biomedCompanyLogin', 'biomedCompanyLogout'], parent);
-			};
-		}
 	}
 
 	project.entraAuth = {
@@ -388,6 +795,7 @@
 		redirectUris: redirectUris.slice(),
 		loginScopes: loginScopes.slice(),
 		graphScopes: graphScopes.slice(),
+		msalBrowserUrl: msalBrowserUrl,
 		isSupportedOrigin: isSupportedOrigin,
 		isCompanyAccount: isCompanyAccount,
 		getAccount: getAccount,
@@ -396,12 +804,29 @@
 		bootstrap: bootstrap,
 		login: login,
 		logout: logout,
+		ensureCompanySession: ensureCompanySession,
 		acquireGraphToken: acquireGraphToken,
 		formatUiError: formatUiError,
+		showAccessGate: showAccessGate,
+		hideAccessGate: hideAccessGate,
+		refreshGate: refreshGate,
+		handleGateLogin: handleGateLogin,
 		pluginId: pluginId
 	};
 
 	root.BIOMED_ENTRA_AUTH_LOADED = true;
+
+	showAccessGate('Checking company session...');
+	ensureMsalScript().catch(function(err)
+	{
+		updateGate({
+			visible: true,
+			title: err.title || 'Company Access Required',
+			detail: err.detail || 'Sign in with your CytoArm Microsoft account before using this editor.',
+			status: err.message || 'Company sign-in is unavailable.',
+			buttonLabel: 'Try Company Sign-In Again'
+		});
+	});
 
 	if (root.Draw != null && typeof root.Draw.loadPlugin === 'function')
 	{

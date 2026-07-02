@@ -34,7 +34,12 @@ if (preConfigContext.urlParams.sync !== 'manual') {
   throw new Error('PreConfig no longer preserves manual sync mode');
 }
 
-const appConfigContext = createContext({ window: {}, urlParams: {} });
+const appConfigMxscriptCalls = [];
+const appConfigContext = createContext({
+	window: {},
+	urlParams: {},
+	mxscript: (source) => appConfigMxscriptCalls.push(source)
+});
 new Script(await readFile(appConfigPath, 'utf8'), { filename: appConfigPath }).runInContext(appConfigContext);
 
 const projectConfig = appConfigContext.window.BIOMED_FLOWCHART_EDITOR;
@@ -60,6 +65,10 @@ if (projectConfig?.entraClientId !== '70d8b9a4-3050-4f09-9f6c-23edb16595b6' ||
 	throw new Error('Custom app config did not expose the expected Entra identifiers');
 }
 
+if (projectConfig?.msalBrowserUrl !== 'https://alcdn.msauth.net/browser/3.7.1/js/msal-browser.min.js') {
+	throw new Error('Custom app config did not expose the expected MSAL browser bundle URL');
+}
+
 if (projectConfig?.oneDriveConfig?.enablePersonalOneDrive !== false ||
 	projectConfig?.oneDriveConfig?.enableMicrosoft365 !== true) {
 	throw new Error('Custom app config did not expose the expected OneDrive for Business settings');
@@ -71,6 +80,10 @@ if (appConfigContext.urlParams.p !== 'custom-config/auth-msal.js;custom-config/e
 
 if (appConfigContext.urlParams.od !== '0' || appConfigContext.urlParams.ms365 !== '1') {
 	throw new Error('Custom app config did not force the expected Microsoft 365 storage mode');
+}
+
+if (!appConfigMxscriptCalls.includes('custom-config/auth-msal.js')) {
+	throw new Error('Custom app config did not preload the auth module through mxscript');
 }
 
 if (appConfigContext.window.DRAWIO_MSGRAPH_CLIENT_ID !== '70d8b9a4-3050-4f09-9f6c-23edb16595b6' ||
