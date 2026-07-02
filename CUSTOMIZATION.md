@@ -151,6 +151,19 @@ This file records every project-specific change made on top of the upstream
 - Added automated validation for tenant/client IDs, redirect URIs, Graph
   scopes, supported-origin checks, and non-company-account rejection behavior.
 
+### Cloudflare Access pivot
+
+- Removed `src/main/webapp/custom-config/auth-msal.js` after the in-app gate
+  proved unreliable in the deployed Pages environment.
+- Updated `src/main/webapp/custom-config/app-config.js` to stop loading the
+  project-owned MSAL plugin and to declare Cloudflare Access as the expected
+  outer access-control layer.
+- Kept the existing Microsoft Graph client and tenant identifiers so draw.io's
+  native M365 storage path can still use the registered Entra application.
+- Updated deployment documentation and automated validation so company-only
+  access is verified as an owner-configured Cloudflare Access responsibility
+  instead of an in-app sign-in feature.
+
 ### T-130: OneDrive for Business storage wiring
 
 - Updated `src/main/webapp/custom-config/app-config.js` to publish the tenant

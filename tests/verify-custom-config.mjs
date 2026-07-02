@@ -5,7 +5,6 @@ import { join, resolve } from 'node:path';
 const repoRoot = resolve(new URL('..', import.meta.url).pathname);
 const preConfigPath = join(repoRoot, 'src/main/webapp/js/PreConfig.js');
 const appConfigPath = join(repoRoot, 'src/main/webapp/custom-config/app-config.js');
-const authConfigPath = join(repoRoot, 'src/main/webapp/custom-config/auth-msal.js');
 const exportHintPluginPath = join(repoRoot, 'src/main/webapp/custom-config/export-pptx-hint.js');
 const isoLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/iso5807.xml');
 const qualitySystemLibraryPath = join(repoRoot, 'src/main/webapp/custom-libraries/quality-system.xml');
@@ -52,10 +51,6 @@ if (projectConfig?.version !== '0.1.0' || projectConfig?.configLoaded !== true) 
 	throw new Error('Custom app config did not expose the expected project namespace');
 }
 
-if (projectConfig?.authPluginPath !== 'custom-config/auth-msal.js') {
-	throw new Error('Custom app config did not expose the expected auth plugin path');
-}
-
 if (projectConfig?.exportHintPluginPath !== 'custom-config/export-pptx-hint.js') {
 	throw new Error('Custom app config did not expose the expected PPTX export hint plugin path');
 }
@@ -65,8 +60,9 @@ if (projectConfig?.entraClientId !== '70d8b9a4-3050-4f09-9f6c-23edb16595b6' ||
 	throw new Error('Custom app config did not expose the expected Entra identifiers');
 }
 
-if (projectConfig?.msalBrowserUrl !== 'https://alcdn.msauth.net/browser/3.7.1/js/msal-browser.min.js') {
-	throw new Error('Custom app config did not expose the expected MSAL browser bundle URL');
+if (projectConfig?.accessControl?.mode !== 'cloudflare-access' ||
+	projectConfig?.accessControl?.ownerConfigured !== true) {
+	throw new Error('Custom app config did not expose the expected Cloudflare Access strategy');
 }
 
 if (projectConfig?.oneDriveConfig?.enablePersonalOneDrive !== false ||
@@ -74,16 +70,16 @@ if (projectConfig?.oneDriveConfig?.enablePersonalOneDrive !== false ||
 	throw new Error('Custom app config did not expose the expected OneDrive for Business settings');
 }
 
-if (appConfigContext.urlParams.p !== 'custom-config/auth-msal.js;custom-config/export-pptx-hint.js') {
-	throw new Error('Custom app config did not register the expected custom plugins in urlParams.p');
+if (appConfigContext.urlParams.p !== 'custom-config/export-pptx-hint.js') {
+	throw new Error('Custom app config did not register the expected custom plugin set');
 }
 
 if (appConfigContext.urlParams.od !== '0' || appConfigContext.urlParams.ms365 !== '1') {
 	throw new Error('Custom app config did not force the expected Microsoft 365 storage mode');
 }
 
-if (!appConfigMxscriptCalls.includes('custom-config/auth-msal.js')) {
-	throw new Error('Custom app config did not preload the auth module through mxscript');
+if (appConfigMxscriptCalls.length !== 0) {
+	throw new Error('Custom app config should not preload an in-app sign-in module');
 }
 
 if (appConfigContext.window.DRAWIO_MSGRAPH_CLIENT_ID !== '70d8b9a4-3050-4f09-9f6c-23edb16595b6' ||
@@ -230,16 +226,7 @@ if (cartProcessLibraryEntries.length !== 13 || cartProcessLibraryEntries[0].id !
 	throw new Error('CAR-T Process custom library does not contain the expected 13 entries');
 }
 
-const authConfigScript = await readFile(authConfigPath, 'utf8');
 const exportHintScript = await readFile(exportHintPluginPath, 'utf8');
-
-if (!authConfigScript.includes('70d8b9a4-3050-4f09-9f6c-23edb16595b6')) {
-	throw new Error('MSAL auth config file does not include the expected client ID');
-}
-
-if (!authConfigScript.includes('a0485c91-c913-4c24-853d-30728fcb5843')) {
-	throw new Error('MSAL auth config file does not include the expected tenant ID');
-}
 
 if (!exportHintScript.includes('help/pptx-export.html')) {
 	throw new Error('PPTX export hint plugin does not reference the deployed help page');

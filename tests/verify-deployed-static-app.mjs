@@ -19,7 +19,7 @@ const checks = [
   },
   {
     path: '/custom-config/app-config.js',
-    includes: ['custom-config/export-pptx-hint.js', 'custom-config/auth-msal.js']
+    includes: ['custom-config/export-pptx-hint.js', "mode: 'cloudflare-access'"]
   },
   {
     path: '/admin/',

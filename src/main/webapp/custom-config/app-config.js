@@ -3,11 +3,9 @@
 	'use strict';
 
 	var root = window;
-	var authPluginPath = 'custom-config/auth-msal.js';
 	var exportHintPluginPath = 'custom-config/export-pptx-hint.js';
 	var entraClientId = '70d8b9a4-3050-4f09-9f6c-23edb16595b6';
 	var entraTenantId = 'a0485c91-c913-4c24-853d-30728fcb5843';
-	var msalBrowserUrl = 'https://alcdn.msauth.net/browser/3.7.1/js/msal-browser.min.js';
 	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system;lab-templates;antibody-process;cart-process';
 	var customLibraries = [
 		{
@@ -131,11 +129,13 @@
 		version: '0.1.0',
 		configLoaded: true,
 		customLibraries: customLibraries,
-		authPluginPath: authPluginPath,
 		exportHintPluginPath: exportHintPluginPath,
 		entraClientId: entraClientId,
 		entraTenantId: entraTenantId,
-		msalBrowserUrl: msalBrowserUrl,
+		accessControl: {
+			mode: 'cloudflare-access',
+			ownerConfigured: true
+		},
 		oneDriveConfig: {
 			enablePersonalOneDrive: false,
 			enableMicrosoft365: true
@@ -145,20 +145,10 @@
 	root.DRAWIO_MSGRAPH_CLIENT_ID = entraClientId;
 	root.DRAWIO_MSGRAPH_TENANT_ID = entraTenantId;
 
-	if (typeof mxscript === 'function')
-	{
-		mxscript(authPluginPath);
-	}
-
 	if (typeof urlParams === 'object' && urlParams != null)
 	{
 		var pluginPaths = (urlParams.p != null && urlParams.p.length > 0) ?
 			urlParams.p.split(';') : [];
-
-		if (pluginPaths.indexOf(authPluginPath) < 0)
-		{
-			pluginPaths.push(authPluginPath);
-		}
 
 		if (pluginPaths.indexOf(exportHintPluginPath) < 0)
 		{

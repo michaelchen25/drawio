@@ -9,9 +9,12 @@ for (const phrase of [
 	'Build command: `npm run build`',
 	'Build output directory: `src/main/webapp`',
 	'BIOMED_PAGES_URL="https://your-project.pages.dev" npm run test:deployed',
+	'Cloudflare Access',
+	'Zero Trust',
+	'Allow policy',
+	'identity provider',
 	'Open `/admin/`',
 	'Open `/help/pptx-export.html`',
-	'Extras -> Company Sign In...',
 	'File -> Save As -> M365',
 	'File -> Open From -> M365',
 	'redirect URI'
