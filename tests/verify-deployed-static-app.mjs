@@ -15,7 +15,7 @@ const checks = [
   },
   {
     path: '/js/bootstrap.js',
-    includes: ['GraphViewer']
+    includes: ['var urlParams', 'function mxscript']
   },
   {
     path: '/custom-config/app-config.js',
