@@ -35,7 +35,11 @@ if (preConfigContext.urlParams.sync !== 'manual') {
 
 const appConfigMxscriptCalls = [];
 const appConfigContext = createContext({
-	window: {},
+	window: {
+		location: {
+			origin: 'https://drawio-a7q.pages.dev'
+		}
+	},
 	urlParams: {},
 	mxscript: (source) => appConfigMxscriptCalls.push(source)
 });
@@ -92,6 +96,7 @@ if (!Array.isArray(projectConfig.customLibraries)) {
 }
 
 const drawioConfig = appConfigContext.window.DRAWIO_CONFIG;
+const libraryOrigin = appConfigContext.window.location.origin;
 
 if (drawioConfig?.appendCustomLibraries !== true) {
   throw new Error('Custom app config did not append custom libraries through DRAWIO_CONFIG');
@@ -119,7 +124,7 @@ if (!drawioConfig?.defaultLibraries?.split(';').includes('cart-process')) {
 
 const isoSection = drawioConfig?.libraries?.find((section) => section?.id === 'iso5807');
 const isoEntry = isoSection?.entries?.find((entry) => entry?.id === 'iso5807');
-const isoLib = isoEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/iso5807.xml');
+const isoLib = isoEntry?.libs?.find((lib) => lib?.url === `${libraryOrigin}/custom-libraries/iso5807.xml`);
 
 if (isoLib?.preload !== true || isoLib?.title?.main !== 'ISO 5807 Basic Symbols') {
   throw new Error('Custom app config did not register the expected ISO 5807 library entry');
@@ -127,7 +132,7 @@ if (isoLib?.preload !== true || isoLib?.title?.main !== 'ISO 5807 Basic Symbols'
 
 const qualitySystemSection = drawioConfig?.libraries?.find((section) => section?.id === 'quality-system');
 const qualitySystemEntry = qualitySystemSection?.entries?.find((entry) => entry?.id === 'quality-system');
-const qualitySystemLib = qualitySystemEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/quality-system.xml');
+const qualitySystemLib = qualitySystemEntry?.libs?.find((lib) => lib?.url === `${libraryOrigin}/custom-libraries/quality-system.xml`);
 
 if (qualitySystemLib?.preload !== true || qualitySystemLib?.title?.main !== 'Quality System') {
   throw new Error('Custom app config did not register the expected Quality System library entry');
@@ -135,7 +140,7 @@ if (qualitySystemLib?.preload !== true || qualitySystemLib?.title?.main !== 'Qua
 
 const labTemplatesSection = drawioConfig?.libraries?.find((section) => section?.id === 'lab-templates');
 const labTemplatesEntry = labTemplatesSection?.entries?.find((entry) => entry?.id === 'lab-templates');
-const labTemplatesLib = labTemplatesEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/lab-templates.xml');
+const labTemplatesLib = labTemplatesEntry?.libs?.find((lib) => lib?.url === `${libraryOrigin}/custom-libraries/lab-templates.xml`);
 
 if (labTemplatesLib?.preload !== true || labTemplatesLib?.title?.main !== 'Lab Templates') {
   throw new Error('Custom app config did not register the expected Lab Templates library entry');
@@ -143,7 +148,7 @@ if (labTemplatesLib?.preload !== true || labTemplatesLib?.title?.main !== 'Lab T
 
 const antibodyProcessSection = drawioConfig?.libraries?.find((section) => section?.id === 'antibody-process');
 const antibodyProcessEntry = antibodyProcessSection?.entries?.find((entry) => entry?.id === 'antibody-process');
-const antibodyProcessLib = antibodyProcessEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/antibody-process.xml');
+const antibodyProcessLib = antibodyProcessEntry?.libs?.find((lib) => lib?.url === `${libraryOrigin}/custom-libraries/antibody-process.xml`);
 
 if (antibodyProcessLib?.preload !== true || antibodyProcessLib?.title?.main !== 'Antibody Process') {
   throw new Error('Custom app config did not register the expected Antibody Process library entry');
@@ -151,7 +156,7 @@ if (antibodyProcessLib?.preload !== true || antibodyProcessLib?.title?.main !== 
 
 const cartProcessSection = drawioConfig?.libraries?.find((section) => section?.id === 'cart-process');
 const cartProcessEntry = cartProcessSection?.entries?.find((entry) => entry?.id === 'cart-process');
-const cartProcessLib = cartProcessEntry?.libs?.find((lib) => lib?.url === 'custom-libraries/cart-process.xml');
+const cartProcessLib = cartProcessEntry?.libs?.find((lib) => lib?.url === `${libraryOrigin}/custom-libraries/cart-process.xml`);
 
 if (cartProcessLib?.preload !== true || cartProcessLib?.title?.main !== 'CAR-T Process') {
   throw new Error('Custom app config did not register the expected CAR-T Process library entry');

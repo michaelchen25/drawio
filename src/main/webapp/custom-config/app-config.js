@@ -7,6 +7,14 @@
 	var entraClientId = '70d8b9a4-3050-4f09-9f6c-23edb16595b6';
 	var entraTenantId = 'a0485c91-c913-4c24-853d-30728fcb5843';
 	var defaultLibraries = 'general;uml;er;bpmn;flowchart;basic;arrows2;iso5807;quality-system;lab-templates;antibody-process;cart-process';
+	var appOrigin = (root.location != null && typeof root.location.origin === 'string') ?
+		root.location.origin : '';
+
+	function getLibraryUrl(fileName)
+	{
+		return appOrigin + '/custom-libraries/' + fileName;
+	}
+
 	var customLibraries = [
 		{
 			id: 'iso5807',
@@ -24,7 +32,7 @@
 							title: {
 								main: 'ISO 5807 Basic Symbols'
 							},
-							url: 'custom-libraries/iso5807.xml',
+							url: getLibraryUrl('iso5807.xml'),
 							preload: true
 						}
 					]
@@ -47,7 +55,7 @@
 							title: {
 								main: 'Quality System'
 							},
-							url: 'custom-libraries/quality-system.xml',
+							url: getLibraryUrl('quality-system.xml'),
 							preload: true
 						}
 					]
@@ -70,7 +78,7 @@
 							title: {
 								main: 'Lab Templates'
 							},
-							url: 'custom-libraries/lab-templates.xml',
+							url: getLibraryUrl('lab-templates.xml'),
 							preload: true
 						}
 					]
@@ -93,7 +101,7 @@
 							title: {
 								main: 'Antibody Process'
 							},
-							url: 'custom-libraries/antibody-process.xml',
+							url: getLibraryUrl('antibody-process.xml'),
 							preload: true
 						}
 					]
@@ -116,7 +124,7 @@
 							title: {
 								main: 'CAR-T Process'
 							},
-							url: 'custom-libraries/cart-process.xml',
+							url: getLibraryUrl('cart-process.xml'),
 							preload: true
 						}
 					]
